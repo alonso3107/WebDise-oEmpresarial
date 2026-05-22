@@ -1,6 +1,7 @@
 // ============================================================
 // BoticaVR — LoginForm
-// Formulario de inicio de sesión. Usa componentes UI reutilizables.
+// Formulario de inicio de sesión con modo demo controlado por
+// variable de entorno VITE_DEMO_MODE.
 // ============================================================
 
 import { useState } from 'react';
@@ -9,6 +10,9 @@ import { LogIn, Pill, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import useAuthStore from '../../../context/authStore';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
+
+/**true si el modo demo está activado vía .env */
+const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === 'true';
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -29,6 +33,15 @@ export default function LoginForm() {
 
     const exito = await login(username.trim(), password);
     if (exito) navigate('/dashboard', { replace: true });
+  };
+
+  /**
+   * Modo demo: inyecta token falso y redirige al dashboard.
+   * Solo se ejecuta si VITE_DEMO_MODE=true en .env
+   */
+  const demoLogin = () => {
+    useAuthStore.getState().demoLogin();
+    navigate('/dashboard', { replace: true });
   };
 
   const mensajeError = errorLocal || error;
@@ -58,44 +71,49 @@ export default function LoginForm() {
             </div>
           )}
 
-          <Input
-            label="Usuario"
-            placeholder="Tu nombre de usuario"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            autoComplete="username"
-            autoFocus
-            disabled={isLoading}
-          />
+          <Input label="Usuario" placeholder="Tu nombre de usuario" value={username}
+            onChange={(e) => setUsername(e.target.value)} autoComplete="username" autoFocus disabled={isLoading} />
 
           <div className="relative">
-            <Input
-              label="Contraseña"
-              type={mostrarPassword ? 'text' : 'password'}
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              disabled={isLoading}
-            />
-            <button
-              type="button"
-              onClick={() => setMostrarPassword(!mostrarPassword)}
-              className="absolute right-3 top-[38px] text-[var(--color-texto-sec)] hover:text-[var(--color-texto)] transition-colors duration-300 p-1"
-              tabIndex={-1}
-            >
+            <Input label="Contraseña" type={mostrarPassword ? 'text' : 'password'}
+              placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password" disabled={isLoading} />
+            <button type="button" onClick={() => setMostrarPassword(!mostrarPassword)}
+              className="absolute right-3 top-[38px] text-[var(--color-texto-sec)] hover:text-[var(--color-texto)] transition-colors duration-300 p-1" tabIndex={-1}>
               {mostrarPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             </button>
           </div>
 
           <Button type="submit" fullWidth isLoading={isLoading}>
-            <LogIn className="w-5 h-5" />
-            Ingresar
+            <LogIn className="w-5 h-5" /> Ingresar
           </Button>
 
           <p className="text-center text-xs text-[var(--color-texto-sec)] font-light italic">
             Uso exclusivo para trabajadores de BoticaVR
           </p>
+
+          {/* ── Modo demo: solo visible con VITE_DEMO_MODE=true ── */}
+          {DEMO_MODE && (
+            <>
+              <div className="relative my-4">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-[var(--color-borde)]" />
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="px-3 bg-[var(--color-card)] text-xs text-[var(--color-texto-sec)] font-light italic">o</span>
+                </div>
+              </div>
+
+              <button type="button" onClick={demoLogin}
+                className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl border-2 border-dashed border-[var(--color-borde)] text-[var(--color-texto-sec)] font-medium hover:border-[var(--color-primario)] hover:text-[var(--color-primario)] hover:bg-[var(--color-primario)]/5 transition-all duration-300">
+                🔧 Entrar sin backend (demo)
+              </button>
+
+              <p className="text-center text-xs text-[var(--color-texto-sec)] font-light italic">
+                ⚠️ Modo desarrollo — el backend no está corriendo
+              </p>
+            </>
+          )}
         </form>
       </div>
     </div>

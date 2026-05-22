@@ -86,6 +86,20 @@ const useAuthStore = create((set, get) => ({
    * Cierra la sesión del trabajador.
    * Limpia token, usuario y redirige al login.
    */
+  /**
+   * Modo demo: inicia sesión sin backend.
+   * ⚠️ Solo para desarrollo.
+   */
+  demoLogin: () => {
+    localStorage.setItem('botica-token', 'demo-token-boticavr-2026');
+    set({
+      token: 'demo-token-boticavr-2026',
+      isAuthenticated: true,
+      isLoading: false,
+      error: null,
+    });
+  },
+
   logout: () => {
     // Intentar notificar al backend (fire-and-forget)
     apiClient.post('/auth/logout').catch(() => {
