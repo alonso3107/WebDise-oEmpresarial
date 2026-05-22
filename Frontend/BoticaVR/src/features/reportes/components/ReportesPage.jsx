@@ -1,19 +1,12 @@
 // ============================================================
 // BoticaVR — ReportesPage
-// Gráficas: ventas mensuales (BarChart), top productos,
-// ingresos por categoría. Exportar CSV.
-// ⚠️ MOCK hasta que el backend implemente endpoints de reportes.
+// Gráficas + filtros + exportación. Componentes UI reutilizables.
 // ============================================================
 
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, Legend,
-} from 'recharts';
-import {
-  TrendingUp, Download, Package, DollarSign, Star,
-  Calendar, BarChart3, PieChart as PieChartIcon,
-} from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+import { TrendingUp, Download, Package, DollarSign, Star, Calendar, BarChart3, PieChart as PieChartIcon } from 'lucide-react';
 import { useReportes } from '../hooks/useReportes';
+import Button from '../../../components/ui/Button';
 import toast from 'react-hot-toast';
 
 const COLORES = ['#5C6D7C', '#4A5A68', '#7B8FA1', '#96A8B5', '#B0BEC5', '#C8D4DB', '#DCE4E8'];
@@ -23,11 +16,7 @@ function TooltipPersonalizado({ active, payload, label }) {
   return (
     <div className="bg-[var(--color-card)] rounded-xl shadow-lg p-3 border border-[var(--color-borde)]">
       <p className="text-sm font-medium text-[var(--color-texto)]">{label}</p>
-      {payload.map((entry, i) => (
-        <p key={i} className="text-sm" style={{ color: entry.color }}>
-          {entry.name}: {entry.name === 'ingresos' ? 'S/ ' : ''}{entry.value.toLocaleString('es-PE')}
-        </p>
-      ))}
+      {payload.map((e, i) => <p key={i} className="text-sm" style={{ color: e.color }}>{e.name}: {e.name === 'ingresos' ? 'S/ ' : ''}{e.value.toLocaleString('es-PE')}</p>)}
     </div>
   );
 }
@@ -35,62 +24,37 @@ function TooltipPersonalizado({ active, payload, label }) {
 function StatCard({ icon: Icon, label, value, suffix = '' }) {
   return (
     <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] p-5 flex items-center gap-4 transition-all duration-500 hover:shadow-[var(--shadow-card-hover)] hover:scale-[1.01]">
-      <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-[var(--color-primario)]/10">
-        <Icon className="w-6 h-6 text-[var(--color-primario)]" />
-      </div>
-      <div>
-        <p className="text-sm text-[var(--color-texto-sec)] font-light italic">{label}</p>
-        <p className="text-2xl font-bold text-[var(--color-texto)]">{value}{suffix}</p>
-      </div>
+      <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-[var(--color-primario)]/10"><Icon className="w-6 h-6 text-[var(--color-primario)]" /></div>
+      <div><p className="text-sm text-[var(--color-texto-sec)] font-light italic">{label}</p><p className="text-2xl font-bold text-[var(--color-texto)]">{value}{suffix}</p></div>
     </div>
   );
 }
 
 export default function ReportesPage() {
-  const {
-    ventasMensuales, productosTop, ingresosCat, resumen,
-    filtroDesde, setFiltroDesde,
-    filtroHasta, setFiltroHasta,
-    exportarCSV,
-  } = useReportes();
+  const { ventasMensuales, productosTop, ingresosCat, resumen, filtroDesde, setFiltroDesde, filtroHasta, setFiltroHasta, exportarCSV } = useReportes();
 
-  const handleExportar = (tipo) => {
-    exportarCSV(tipo);
-    toast.success(`Reporte de ${tipo} descargado`);
-  };
+  const handleExportar = (tipo) => { exportarCSV(tipo); toast.success(`Reporte de ${tipo} descargado`); };
 
   return (
     <div className="space-y-6">
-      {/* Cabecera */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-[var(--color-texto)]">Reportes</h1>
-          <p className="text-sm text-[var(--color-texto-sec)] font-light italic mt-1">
-            Estadísticas y análisis del negocio
-          </p>
+          <p className="text-sm text-[var(--color-texto-sec)] font-light italic mt-1">Estadísticas y análisis del negocio</p>
         </div>
         <div className="flex items-center gap-3">
           <Calendar className="w-5 h-5 text-[var(--color-texto-sec)]" />
-          <input type="date" value={filtroDesde} onChange={(e) => setFiltroDesde(e.target.value)}
-            className="px-3 py-2 rounded-xl border border-[var(--color-borde)] bg-[var(--color-card)] shadow-[var(--shadow-card)] text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)] transition-shadow duration-300" />
+          <input type="date" value={filtroDesde} onChange={(e) => setFiltroDesde(e.target.value)} className="px-3 py-2 rounded-xl border border-[var(--color-borde)] bg-[var(--color-card)] shadow-[var(--shadow-card)] text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)] transition-shadow duration-300" />
           <span className="text-[var(--color-texto-sec)]">—</span>
-          <input type="date" value={filtroHasta} onChange={(e) => setFiltroHasta(e.target.value)}
-            className="px-3 py-2 rounded-xl border border-[var(--color-borde)] bg-[var(--color-card)] shadow-[var(--shadow-card)] text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)] transition-shadow duration-300" />
+          <input type="date" value={filtroHasta} onChange={(e) => setFiltroHasta(e.target.value)} className="px-3 py-2 rounded-xl border border-[var(--color-borde)] bg-[var(--color-card)] shadow-[var(--shadow-card)] text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)] transition-shadow duration-300" />
         </div>
       </div>
 
-      {/* ⚠️ Aviso mock */}
       <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3">
         <span className="text-amber-600 text-lg">⚠️</span>
-        <div>
-          <p className="text-sm font-medium text-amber-800">Datos de ejemplo</p>
-          <p className="text-xs text-amber-700 font-light italic mt-0.5">
-            Los reportes usan datos simulados. Se conectarán al backend cuando se implementen los endpoints de estadísticas.
-          </p>
-        </div>
+        <div><p className="text-sm font-medium text-amber-800">Datos de ejemplo</p><p className="text-xs text-amber-700 font-light italic mt-0.5">Los reportes usan datos simulados. Se conectarán al backend cuando se implementen los endpoints de estadísticas.</p></div>
       </div>
 
-      {/* Cards resumen */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard icon={DollarSign} label="Ingresos totales" value={`S/ ${resumen.ingresos_totales.toLocaleString('es-PE')}`} />
         <StatCard icon={TrendingUp} label="Ventas totales" value={resumen.ventas_totales} />
@@ -98,17 +62,10 @@ export default function ReportesPage() {
         <StatCard icon={Package} label="Producto estrella" value={resumen.producto_top} />
       </div>
 
-      {/* Gráfica: Ventas mensuales */}
       <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] p-6">
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <BarChart3 className="w-5 h-5 text-[var(--color-primario)]" />
-            <h2 className="text-lg font-semibold text-[var(--color-texto)]">Ventas mensuales</h2>
-          </div>
-          <button onClick={() => handleExportar('ventas')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-[var(--color-texto-sec)] hover:text-[var(--color-primario)] hover:bg-[var(--color-fondo)] transition-all duration-300">
-            <Download className="w-3.5 h-3.5" /> CSV
-          </button>
+          <div className="flex items-center gap-2"><BarChart3 className="w-5 h-5 text-[var(--color-primario)]" /><h2 className="text-lg font-semibold text-[var(--color-texto)]">Ventas mensuales</h2></div>
+          <Button variant="secundario" tamaño="sm" onClick={() => handleExportar('ventas')}><Download className="w-3.5 h-3.5" /> CSV</Button>
         </div>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
@@ -123,55 +80,33 @@ export default function ReportesPage() {
         </div>
       </div>
 
-      {/* Gráficas inferiores */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Top productos */}
         <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] p-6">
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Package className="w-5 h-5 text-[var(--color-primario)]" />
-              <h2 className="text-lg font-semibold text-[var(--color-texto)]">Productos más vendidos</h2>
-            </div>
-            <button onClick={() => handleExportar('productos')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-[var(--color-texto-sec)] hover:text-[var(--color-primario)] hover:bg-[var(--color-fondo)] transition-all duration-300">
-              <Download className="w-3.5 h-3.5" /> CSV
-            </button>
+            <div className="flex items-center gap-2"><Package className="w-5 h-5 text-[var(--color-primario)]" /><h2 className="text-lg font-semibold text-[var(--color-texto)]">Productos más vendidos</h2></div>
+            <Button variant="secundario" tamaño="sm" onClick={() => handleExportar('productos')}><Download className="w-3.5 h-3.5" /> CSV</Button>
           </div>
           <div className="space-y-3 max-h-[350px] overflow-y-auto">
             {productosTop.map((p, i) => (
               <div key={p.nombre} className="flex items-center gap-3 p-3 rounded-xl hover:bg-[var(--color-fondo)] transition-colors duration-300">
-                <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[var(--color-primario)]/10 text-sm font-bold text-[var(--color-primario)]">
-                  {i + 1}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-[var(--color-texto)] truncate">{p.nombre}</p>
-                  <p className="text-xs text-[var(--color-texto-sec)] font-light italic">{p.cantidad} unidades</p>
-                </div>
+                <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-[var(--color-primario)]/10 text-sm font-bold text-[var(--color-primario)]">{i + 1}</span>
+                <div className="flex-1 min-w-0"><p className="text-sm font-medium text-[var(--color-texto)] truncate">{p.nombre}</p><p className="text-xs text-[var(--color-texto-sec)] font-light italic">{p.cantidad} unidades</p></div>
                 <span className="text-sm font-semibold text-[var(--color-exito)]">S/ {p.ingresos.toFixed(2)}</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Ingresos por categoría */}
         <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] p-6">
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <PieChartIcon className="w-5 h-5 text-[var(--color-primario)]" />
-              <h2 className="text-lg font-semibold text-[var(--color-texto)]">Ingresos por categoría</h2>
-            </div>
-            <button onClick={() => handleExportar('categorias')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-[var(--color-texto-sec)] hover:text-[var(--color-primario)] hover:bg-[var(--color-fondo)] transition-all duration-300">
-              <Download className="w-3.5 h-3.5" /> CSV
-            </button>
+            <div className="flex items-center gap-2"><PieChartIcon className="w-5 h-5 text-[var(--color-primario)]" /><h2 className="text-lg font-semibold text-[var(--color-texto)]">Ingresos por categoría</h2></div>
+            <Button variant="secundario" tamaño="sm" onClick={() => handleExportar('categorias')}><Download className="w-3.5 h-3.5" /> CSV</Button>
           </div>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie data={ingresosCat} dataKey="ingresos" nameKey="categoria" cx="50%" cy="50%" outerRadius={90} innerRadius={45} paddingAngle={3}>
-                  {ingresosCat.map((_, i) => (
-                    <Cell key={i} fill={COLORES[i % COLORES.length]} />
-                  ))}
+                  {ingresosCat.map((_, i) => <Cell key={i} fill={COLORES[i % COLORES.length]} />)}
                 </Pie>
                 <Tooltip formatter={(v) => `S/ ${v.toFixed(2)}`} />
                 <Legend formatter={(v) => <span className="text-sm text-[var(--color-texto)]">{v}</span>} />
