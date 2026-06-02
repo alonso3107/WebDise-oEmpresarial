@@ -4,7 +4,7 @@
 // Fondo primario (#5C6D7C), texto claro (#F2E0D0).
 // ============================================================
 
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   ShoppingCart,
@@ -12,23 +12,23 @@ import {
   Users,
   BarChart3,
   Pill,
-} from 'lucide-react';
+} from "lucide-react";
 
 /**
  * Enlaces de navegación del sidebar.
  * Cada objeto define la ruta, ícono y etiqueta en español.
  */
 const enlaces = [
-  { to: '/dashboard',  icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/ventas',     icon: ShoppingCart,    label: 'Ventas' },
-  { to: '/inventario', icon: Package,          label: 'Inventario' },
-  { to: '/clientes',   icon: Users,            label: 'Clientes' },
-  { to: '/reportes',   icon: BarChart3,        label: 'Reportes' },
+  { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+  { to: "/ventas", icon: ShoppingCart, label: "Ventas" },
+  { to: "/inventario", icon: Package, label: "Inventario" },
+  { to: "/clientes", icon: Users, label: "Clientes" },
+  { to: "/reportes", icon: BarChart3, label: "Reportes" },
 ];
 
 /**
  * Sidebar de navegación principal.
- * 
+ *
  * - Fondo: var(--color-primario) = #5C6D7C
  * - Enlace activo: fondo más claro + indicador lateral
  * - Hover: fondo var(--color-primario-hover)
@@ -65,9 +65,10 @@ export default function Sidebar() {
               className={`
                 flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium
                 transition-all duration-300
-                ${isActive
-                  ? 'bg-white/20 text-[var(--color-fondo)] shadow-sm'
-                  : 'text-[var(--color-fondo)]/70 hover:bg-[var(--color-primario-hover)] hover:text-[var(--color-fondo)]'
+                ${
+                  isActive
+                    ? "bg-white/20 text-[var(--color-fondo)] shadow-sm"
+                    : "text-[var(--color-fondo)]/70 hover:bg-[var(--color-primario-hover)] hover:text-[var(--color-fondo)]"
                 }
               `}
             >
@@ -81,7 +82,7 @@ export default function Sidebar() {
       {/* ── Footer ── */}
       <div className="px-6 py-4 border-t border-white/10">
         <p className="text-xs text-[var(--color-fondo)]/50 font-light italic text-center">
-          v1.0 — Uso local
+          v2.0 — Uso local
         </p>
       </div>
     </aside>
