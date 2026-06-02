@@ -46,8 +46,12 @@ export default function DatePickerFiltro({
             <DatePicker.Content
               css={{
                 borderRadius: "16px",
+                border: "1px solid var(--chakra-colors-gray-200)",
+                background: "var(--chakra-colors-white)",
+                boxShadow: "0 6px 18px rgba(15, 23, 42, 0.06)",
+                overflow: "hidden",
                 _focusWithin: {
-                  boxShadow: "0 0 0 1px var(--chakra-colors-blue-100)",
+                  borderColor: "var(--chakra-colors-gray-300)",
                 },
               }}
             >
