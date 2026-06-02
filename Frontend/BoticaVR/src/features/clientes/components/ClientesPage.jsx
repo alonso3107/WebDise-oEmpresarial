@@ -3,7 +3,7 @@
 // Tabla + CRUD + historial. Componentes UI reutilizables.
 // ============================================================
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Plus, Search, Pencil, Trash2, Users, History, X, Save, Phone, ShoppingBag, AlertTriangle, RefreshCw } from 'lucide-react';
 import { useClientes } from '../hooks/useClientes';
 import Button from '../../../components/ui/Button';
@@ -11,17 +11,64 @@ import Input from '../../../components/ui/Input';
 import Modal from '../../../components/ui/Modal';
 import { TableSkeleton } from '../../../components/ui/Skeleton';
 
+const DNI_REGEX = /^\d{8}$/;
+const TELEFONO_REGEX = /^9\d{8}$/;
+const NOMBRE_REGEX = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s'.-]+$/;
+
+const limpiarNombre = (valor) => valor.replace(/\s+/g, ' ').trim();
+const limpiarDigitos = (valor, maxLength) => valor.replace(/\D/g, '').slice(0, maxLength);
+
 function ClienteForm({ cliente, onGuardar, onCancelar, isSaving }) {
   const [nombre, setNombre] = useState(cliente?.nombre || '');
   const [dni, setDni] = useState(cliente?.dni || '');
   const [telefono, setTelefono] = useState(cliente?.telefono || '');
-  const [errorLocal, setErrorLocal] = useState('');
+  const [errores, setErrores] = useState({ nombre: '', dni: '', telefono: '' });
+
+  useEffect(() => {
+    setNombre(cliente?.nombre || '');
+    setDni(cliente?.dni || '');
+    setTelefono(cliente?.telefono || '');
+    setErrores({ nombre: '', dni: '', telefono: '' });
+  }, [cliente]);
+
+  const validar = () => {
+    const nombreLimpio = limpiarNombre(nombre);
+    const dniLimpio = limpiarDigitos(dni, 8);
+    const telefonoLimpio = limpiarDigitos(telefono, 9);
+    const nuevosErrores = { nombre: '', dni: '', telefono: '' };
+
+    if (!nombreLimpio) {
+      nuevosErrores.nombre = 'El nombre es obligatorio';
+    } else if (nombreLimpio.length < 3) {
+      nuevosErrores.nombre = 'El nombre debe tener al menos 3 caracteres';
+    } else if (!NOMBRE_REGEX.test(nombreLimpio)) {
+      nuevosErrores.nombre = 'El nombre solo debe contener letras, espacios, puntos o guiones';
+    }
+
+    if (!DNI_REGEX.test(dniLimpio)) {
+      nuevosErrores.dni = 'El DNI debe tener exactamente 8 dígitos y no puede ser negativo';
+    }
+
+    if (telefonoLimpio && !TELEFONO_REGEX.test(telefonoLimpio)) {
+      nuevosErrores.telefono = 'El teléfono debe tener 9 dígitos y empezar con 9';
+    }
+
+    setErrores(nuevosErrores);
+    return {
+      valido: !nuevosErrores.nombre && !nuevosErrores.dni && !nuevosErrores.telefono,
+      datos: {
+        nombre: nombreLimpio,
+        dni: dniLimpio,
+        telefono: telefonoLimpio,
+      },
+    };
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!nombre.trim()) { setErrorLocal('El nombre es obligatorio'); return; }
-    if (!dni.trim() || dni.length < 8) { setErrorLocal('DNI inválido (mínimo 8 dígitos)'); return; }
-    onGuardar({ nombre: nombre.trim(), dni: dni.trim(), telefono: telefono.trim() });
+    const resultado = validar();
+    if (!resultado.valido) return;
+    onGuardar(resultado.datos);
   };
 
   return (
@@ -32,11 +79,43 @@ function ClienteForm({ cliente, onGuardar, onCancelar, isSaving }) {
       </>}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
-        {errorLocal && <p className="text-sm text-[var(--color-alerta)] bg-red-50 border border-red-200 rounded-lg p-3">{errorLocal}</p>}
-        <Input label="Nombre completo *" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Ej: María López García" disabled={isSaving} autoFocus />
+        <Input
+          label="Nombre completo *"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+          placeholder="Ej: María López García"
+          error={errores.nombre}
+          disabled={isSaving}
+          autoFocus
+          autoComplete="name"
+          inputMode="text"
+        />
         <div className="grid grid-cols-2 gap-4">
-          <Input label="DNI *" value={dni} onChange={(e) => setDni(e.target.value)} placeholder="12345678" maxLength={8} disabled={isSaving} />
-          <Input label="Teléfono" value={telefono} onChange={(e) => setTelefono(e.target.value)} placeholder="987654321" maxLength={9} disabled={isSaving} />
+          <Input
+            label="DNI *"
+            value={dni}
+            onChange={(e) => setDni(limpiarDigitos(e.target.value, 8))}
+            placeholder="12345678"
+            maxLength={8}
+            disabled={isSaving}
+            error={errores.dni}
+            inputMode="numeric"
+            pattern="[0-9]{8}"
+            autoComplete="off"
+          />
+          <Input
+            label="Teléfono"
+            value={telefono}
+            onChange={(e) => setTelefono(limpiarDigitos(e.target.value, 9))}
+            placeholder="987654321"
+            maxLength={9}
+            disabled={isSaving}
+            error={errores.telefono}
+            inputMode="numeric"
+            pattern="9[0-9]{8}"
+            autoComplete="off"
+            hint="Opcional, pero si se ingresa debe empezar con 9"
+          />
         </div>
       </form>
     </Modal>

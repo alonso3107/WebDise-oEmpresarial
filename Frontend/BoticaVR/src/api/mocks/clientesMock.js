@@ -6,6 +6,9 @@
 
 const CLIENTES_KEY = 'botica-clientes';
 
+const limpiarNombre = (valor = '') => String(valor).replace(/\s+/g, ' ').trim();
+const limpiarDigitos = (valor = '', maxLength) => String(valor).replace(/\D/g, '').slice(0, maxLength);
+
 /** Clientes de ejemplo precargados */
 const clientesIniciales = [
   { id: 1, nombre: 'María López García', dni: '12345678', telefono: '987654321', fecha_registro: '2026-01-15' },
@@ -32,7 +35,9 @@ const clientesMock = {
     const clientes = this.listar();
     const nuevo = {
       id: Date.now(),
-      ...datos,
+      nombre: limpiarNombre(datos.nombre),
+      dni: limpiarDigitos(datos.dni, 8),
+      telefono: limpiarDigitos(datos.telefono, 9),
       fecha_registro: new Date().toISOString().slice(0, 10),
     };
     clientes.push(nuevo);
@@ -45,7 +50,13 @@ const clientesMock = {
     const clientes = this.listar();
     const idx = clientes.findIndex((c) => c.id === id);
     if (idx === -1) throw new Error('Cliente no encontrado');
-    clientes[idx] = { ...clientes[idx], ...datos };
+    clientes[idx] = {
+      ...clientes[idx],
+      ...datos,
+      nombre: limpiarNombre(datos.nombre ?? clientes[idx].nombre),
+      dni: limpiarDigitos(datos.dni ?? clientes[idx].dni, 8),
+      telefono: limpiarDigitos(datos.telefono ?? clientes[idx].telefono, 9),
+    };
     localStorage.setItem(CLIENTES_KEY, JSON.stringify(clientes));
     return clientes[idx];
   },
