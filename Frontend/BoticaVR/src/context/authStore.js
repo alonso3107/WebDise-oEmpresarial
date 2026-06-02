@@ -4,12 +4,12 @@
 // acciones de login/logout.
 // ============================================================
 
-import { create } from 'zustand';
-import apiClient from '../api/axiosConfig';
+import { create } from "zustand";
+import apiClient from "../api/axiosConfig";
 
 /**
  * Estructura del estado de autenticación.
- * 
+ *
  * @property {string|null} token — JWT access token
  * @property {object|null} usuario — Datos del trabajador autenticado
  * @property {boolean} isAuthenticated — true si hay token válido
@@ -19,21 +19,21 @@ import apiClient from '../api/axiosConfig';
 
 /**
  * Hook principal de autenticación.
- * 
+ *
  * Uso:
  *   const { login, logout, isAuthenticated, usuario } = useAuthStore();
  */
 const useAuthStore = create((set, get) => ({
   // ── Estado inicial ──
-  token: localStorage.getItem('botica-token') || null,
+  token: localStorage.getItem("botica-token") || null,
   usuario: null,
-  isAuthenticated: !!localStorage.getItem('botica-token'),
+  isAuthenticated: !!localStorage.getItem("botica-token"),
   isLoading: false,
   error: null,
 
   /**
    * Inicia sesión con credenciales del trabajador.
-   * 
+   *
    * @param {string} username — Nombre de usuario
    * @param {string} password — Contraseña
    * @returns {Promise<boolean>} true si login exitoso
@@ -42,16 +42,16 @@ const useAuthStore = create((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const response = await apiClient.post('/auth/login', {
+      const response = await apiClient.post("/auth/login", {
         username,
         password,
       });
 
       // El backend responde con { access_token, token_type }
       const { access_token } = response.data;
-      
+
       // Persistir token en localStorage
-      localStorage.setItem('botica-token', access_token);
+      localStorage.setItem("botica-token", access_token);
 
       set({
         token: access_token,
@@ -63,14 +63,14 @@ const useAuthStore = create((set, get) => ({
       return true;
     } catch (error) {
       // Extraer mensaje descriptivo del error
-      let mensaje = 'Error al iniciar sesión';
+      let mensaje = "Error al iniciar sesión";
 
       if (error.response?.status === 401) {
-        mensaje = 'Usuario o contraseña incorrectos';
+        mensaje = "Usuario o contraseña incorrectos";
       } else if (error.response?.data?.detail) {
         mensaje = error.response.data.detail;
       } else if (!error.response) {
-        mensaje = 'No se pudo conectar con el servidor';
+        mensaje = "No se pudo conectar con el servidor";
       }
 
       set({
@@ -91,9 +91,9 @@ const useAuthStore = create((set, get) => ({
    * ⚠️ Solo para desarrollo.
    */
   demoLogin: () => {
-    localStorage.setItem('botica-token', 'demo-token-boticavr-2026');
+    localStorage.setItem("botica-token", "demo-token-boticavr-2026");
     set({
-      token: 'demo-token-boticavr-2026',
+      token: "demo-token-boticavr-2026",
       isAuthenticated: true,
       isLoading: false,
       error: null,
@@ -102,12 +102,12 @@ const useAuthStore = create((set, get) => ({
 
   logout: () => {
     // Intentar notificar al backend (fire-and-forget)
-    apiClient.post('/auth/logout').catch(() => {
+    apiClient.post("/auth/logout").catch(() => {
       // Ignorar errores — el logout local es lo importante
     });
 
     // Limpiar estado local
-    localStorage.removeItem('botica-token');
+    localStorage.removeItem("botica-token");
 
     set({
       token: null,

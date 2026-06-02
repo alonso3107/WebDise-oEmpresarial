@@ -8,20 +8,23 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import './index.css';
+import { Provider } from './components/ui/provider';
 import router from './routes';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
-    <Toaster
-      position="top-right"
-      toastOptions={{
-        duration: 3000,
-        style: {
-          fontFamily: "'Frick', system-ui, sans-serif",
-          fontSize: '14px',
-        },
-      }}
-    />
+    <Provider>
+      <RouterProvider router={router} />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            fontFamily: "'Frick', system-ui, sans-serif",
+            fontSize: '14px',
+          },
+        }}
+      />
+    </Provider>
   </StrictMode>,
 );

@@ -4,11 +4,12 @@
 // ============================================================
 
 import { useState } from 'react';
-import { Search, ShoppingCart, Plus, Minus, Trash2, CreditCard, Banknote, Receipt, History, Calendar, X, Package } from 'lucide-react';
+import { Search, ShoppingCart, Plus, Minus, Trash2, CreditCard, Banknote, Receipt, History, X, Package } from 'lucide-react';
 import { useVentas } from '../hooks/useVentas';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Badge from '../../../components/ui/Badge';
+import DatePickerFiltro from '../../../components/ui/DatePickerFiltro';
 
 export default function VentasPage() {
   const {
@@ -140,10 +141,23 @@ export default function VentasPage() {
         <div className="space-y-4">
           <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] p-4">
             <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-              <Calendar className="w-5 h-5 text-[var(--color-texto-sec)] hidden sm:block" />
-              <div className="flex items-center gap-2"><label className="text-sm text-[var(--color-texto-sec)]">Desde:</label><input type="date" value={filtroDesde} onChange={(e) => setFiltroDesde(e.target.value)} className="px-3 py-2 rounded-xl border border-[var(--color-borde)] bg-[var(--color-fondo)] text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)] transition-shadow duration-300" /></div>
-              <div className="flex items-center gap-2"><label className="text-sm text-[var(--color-texto-sec)]">Hasta:</label><input type="date" value={filtroHasta} onChange={(e) => setFiltroHasta(e.target.value)} className="px-3 py-2 rounded-xl border border-[var(--color-borde)] bg-[var(--color-fondo)] text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)] transition-shadow duration-300" /></div>
-              {(filtroDesde || filtroHasta) && <button onClick={() => { setFiltroDesde(''); setFiltroHasta(''); }} className="flex items-center gap-1 text-sm text-[var(--color-alerta)] hover:underline font-medium"><X className="w-4 h-4" /> Limpiar</button>}
+              <div className="flex items-center gap-2 flex-wrap">
+                <DatePickerFiltro label="Desde" value={filtroDesde} onChange={setFiltroDesde} />
+                <span className="text-[var(--color-texto-sec)] text-sm">—</span>
+                <DatePickerFiltro label="Hasta" value={filtroHasta} onChange={setFiltroHasta} />
+              </div>
+              {(filtroDesde || filtroHasta) && (
+                <button
+                  onClick={() => {
+                    setFiltroDesde('');
+                    setFiltroHasta('');
+                  }}
+                  className="inline-flex items-center gap-1 rounded-full border border-[var(--color-borde)] bg-[var(--color-fondo)] px-3 py-1 text-xs font-medium text-[var(--color-alerta)] transition-colors duration-300 hover:border-[var(--color-alerta)] hover:bg-red-50"
+                >
+                  <X className="w-3.5 h-3.5" />
+                  Limpiar
+                </button>
+              )}
               <span className="text-sm text-[var(--color-texto-sec)] font-light italic ml-auto">{historial.length} venta{historial.length !== 1 ? 's' : ''}</span>
             </div>
           </div>

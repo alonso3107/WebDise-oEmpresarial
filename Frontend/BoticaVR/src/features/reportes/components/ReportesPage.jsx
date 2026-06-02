@@ -4,9 +4,10 @@
 // ============================================================
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import { TrendingUp, Download, Package, DollarSign, Star, Calendar, BarChart3, PieChart as PieChartIcon } from 'lucide-react';
+import { TrendingUp, Download, Package, DollarSign, Star, BarChart3, PieChart as PieChartIcon } from 'lucide-react';
 import { useReportes } from '../hooks/useReportes';
 import Button from '../../../components/ui/Button';
+import DatePickerFiltro from '../../../components/ui/DatePickerFiltro';
 import toast from 'react-hot-toast';
 
 const COLORES = ['#5C6D7C', '#4A5A68', '#7B8FA1', '#96A8B5', '#B0BEC5', '#C8D4DB', '#DCE4E8'];
@@ -42,11 +43,10 @@ export default function ReportesPage() {
           <h1 className="text-2xl font-bold text-[var(--color-texto)]">Reportes</h1>
           <p className="text-sm text-[var(--color-texto-sec)] font-light italic mt-1">Estadísticas y análisis del negocio</p>
         </div>
-        <div className="flex items-center gap-3">
-          <Calendar className="w-5 h-5 text-[var(--color-texto-sec)]" />
-          <input type="date" value={filtroDesde} onChange={(e) => setFiltroDesde(e.target.value)} className="px-3 py-2 rounded-xl border border-[var(--color-borde)] bg-[var(--color-card)] shadow-[var(--shadow-card)] text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)] transition-shadow duration-300" />
-          <span className="text-[var(--color-texto-sec)]">—</span>
-          <input type="date" value={filtroHasta} onChange={(e) => setFiltroHasta(e.target.value)} className="px-3 py-2 rounded-xl border border-[var(--color-borde)] bg-[var(--color-card)] shadow-[var(--shadow-card)] text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)] transition-shadow duration-300" />
+        <div className="flex items-center gap-2 flex-wrap">
+          <DatePickerFiltro label="Desde" value={filtroDesde} onChange={setFiltroDesde} />
+          <span className="text-[var(--color-texto-sec)] text-sm">—</span>
+          <DatePickerFiltro label="Hasta" value={filtroHasta} onChange={setFiltroHasta} />
         </div>
       </div>
 
