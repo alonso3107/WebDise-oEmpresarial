@@ -5,6 +5,7 @@ Todas las variables de entorno y constantes del proyecto se definen aquí.
 
 from typing import List
 
+# pyrefly: ignore [missing-import]
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 

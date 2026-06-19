@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.database import engine, Base
 from app.api.v1.api import router as api_v1_router
+from app.models.producto import Producto  # Registro del modelo para SQLAlchemy
 
 
 @asynccontextmanager

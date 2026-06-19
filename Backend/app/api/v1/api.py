@@ -5,6 +5,7 @@ Aquí se agrupan todos los endpoints de los módulos.
 ⚠️ ARCHIVO COMPARTIDO: Coordinar con el otro dev antes de modificar.
 """
 
+# pyrefly: ignore [missing-import]
 from fastapi import APIRouter
 
 router = APIRouter()
@@ -15,8 +16,9 @@ router = APIRouter()
 # router.include_router(users.router, prefix="/users", tags=["Usuarios"])
 
 # ── Sprint 1 (Dev B): Productos / Inventario ──
-# from app.api.v1.endpoints import productos
-# router.include_router(productos.router, prefix="/productos", tags=["Productos"])
+# pyrefly: ignore [missing-import]
+from app.api.v1.endpoints import productos
+router.include_router(productos.router, prefix="/productos", tags=["Productos"])
 
 # ── Sprint 2 (Dev A): Ventas ──
 # from app.api.v1.endpoints import ventas
