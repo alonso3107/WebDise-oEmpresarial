@@ -5,33 +5,34 @@ Aquí se agrupan todos los endpoints de los módulos.
 ⚠️ ARCHIVO COMPARTIDO: Coordinar con el otro dev antes de modificar.
 """
 
-# pyrefly: ignore [missing-import]
 from fastapi import APIRouter
 
 router = APIRouter()
 
-# ── Sprint 1 (Dev A): Autenticación y Usuarios ──
-# from app.api.v1.endpoints import auth, users
-# router.include_router(auth.router, prefix="/auth", tags=["Autenticación"])
-# router.include_router(users.router, prefix="/users", tags=["Usuarios"])
-
 # ── Sprint 1 (Dev B): Productos / Inventario ──
-# pyrefly: ignore [missing-import]
 from app.api.v1.endpoints import productos
 router.include_router(productos.router, prefix="/productos", tags=["Productos"])
 
-# ── Sprint 2 (Dev A): Ventas ──
-# from app.api.v1.endpoints import ventas
-# router.include_router(ventas.router, prefix="/ventas", tags=["Ventas"])
+# ── Sprint Gonzalo: Categorías ──
+from app.api.v1.endpoints import categorias
+router.include_router(categorias.router, prefix="/categorias", tags=["Categorías"])
 
-# ── Sprint 2 (Dev B): Alertas ──
-# from app.api.v1.endpoints import alertas
-# router.include_router(alertas.router, prefix="/alertas", tags=["Alertas"])
+# ── Sprint Gonzalo: Clientes ──
+from app.api.v1.endpoints import clientes
+router.include_router(clientes.router, prefix="/clientes", tags=["Clientes"])
 
-# ── Sprint 3 (Dev A): Caja ──
-# from app.api.v1.endpoints import caja
-# router.include_router(caja.router, prefix="/caja", tags=["Caja"])
+# ── Sprint Gonzalo: Proveedores ──
+from app.api.v1.endpoints import proveedores
+router.include_router(proveedores.router, prefix="/proveedores", tags=["Proveedores"])
 
-# ── Sprint 3 (Dev B): Reportes ──
-# from app.api.v1.endpoints import reportes
-# router.include_router(reportes.router, prefix="/reportes", tags=["Reportes"])
+# ── Sprint Gonzalo: Promociones ──
+from app.api.v1.endpoints import promociones
+router.include_router(promociones.router, prefix="/promociones", tags=["Promociones"])
+
+# ── Sprint Gonzalo: Ventas (POS) ──
+from app.api.v1.endpoints import ventas
+router.include_router(ventas.router, prefix="/ventas", tags=["Ventas (POS)"])
+
+# ── Sprint Gonzalo: Pagos de Servicios ──
+from app.api.v1.endpoints import servicios
+router.include_router(servicios.router, prefix="/servicios", tags=["Pagos de Servicios"])

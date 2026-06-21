@@ -11,7 +11,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.database import engine, Base
 from app.api.v1.api import router as api_v1_router
-from app.models.producto import Producto  # Registro del modelo para SQLAlchemy
+
+# ── Importar TODOS los modelos para que SQLAlchemy los registre ──
+from app.models.categoria import Categoria
+from app.models.proveedor import Proveedor
+from app.models.producto import Producto
+from app.models.cliente import Cliente
+from app.models.promocion import Promocion
+from app.models.venta import Venta
+from app.models.detalle_venta import DetalleVenta
+from app.models.pago_servicio import PagoServicio
 
 
 @asynccontextmanager
@@ -35,7 +44,8 @@ def create_app() -> FastAPI:
         version=settings.PROJECT_VERSION,
         description=(
             "API REST para la gestión integral de la Botica V&R. "
-            "Módulos: Ventas (POS), Inventario, Alertas, Cuadre de Caja y Reportes."
+            "Módulos: Ventas (POS), Inventario, Clientes, Promociones, "
+            "Categorías, Proveedores, Pagos de Servicios."
         ),
         docs_url="/docs",
         redoc_url="/redoc",
@@ -43,7 +53,6 @@ def create_app() -> FastAPI:
     )
 
     # ── CORS ──
-    # Permite que el frontend en React/Vite (puerto 5173) se comunique con el backend
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.CORS_ORIGINS,

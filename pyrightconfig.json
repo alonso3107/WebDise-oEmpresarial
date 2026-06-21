@@ -2,10 +2,10 @@
   "venvPath": "Backend",
   "venv": "venv",
   "pythonVersion": "3.9",
+  "extraPaths": ["Backend"],
   "executionEnvironments": [
     {
-      "root": "Backend",
-      "extraPaths": ["Backend"]
+      "root": "Backend"
     }
   ]
 }

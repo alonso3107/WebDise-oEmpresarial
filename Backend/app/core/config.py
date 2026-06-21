@@ -23,6 +23,11 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 480  # 8 horas (un turno completo)
 
+    # ── Fidelidad de clientes (configurable por el Product Owner) ──
+    FIDELIDAD_MIN_COMPRAS: int = 5          # Mínimo de compras para ser "fiel"
+    FIDELIDAD_MIN_MONTO: float = 25.0       # Monto mínimo acumulado (soles)
+    DESCUENTO_MAX_PORCENTAJE: float = 15.0  # Tope máximo de descuento combinado (%)
+
     # ── CORS ──
     CORS_ORIGINS: List[str] = [
         "http://localhost:5173",
