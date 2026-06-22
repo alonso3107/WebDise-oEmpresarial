@@ -16,9 +16,10 @@ MODIFICADO por Gonzalo (Sprint 2):
   los productos ya registrados que no tengan esta info asignada.
 """
 
+from datetime import date
 from typing import Optional, TYPE_CHECKING
 
-from sqlalchemy import String, Float, Boolean, Integer, ForeignKey
+from sqlalchemy import String, Float, Boolean, Integer, ForeignKey, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
@@ -40,6 +41,10 @@ class Producto(Base):
         String, unique=True, index=True, nullable=True
     )
     activo: Mapped[bool] = mapped_column(Boolean, default=True)
+
+    # ── Campos de Alertas (Sprint 3) ──
+    fecha_vencimiento: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
+    stock_minimo: Mapped[int] = mapped_column(Integer, default=5)
 
     # ── Campos agregados por Gonzalo (Sprint 2) ──
     categoria_id: Mapped[Optional[int]] = mapped_column(

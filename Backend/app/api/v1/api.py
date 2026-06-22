@@ -36,3 +36,7 @@ router.include_router(ventas.router, prefix="/ventas", tags=["Ventas (POS)"])
 # ── Sprint Gonzalo: Pagos de Servicios ──
 from app.api.v1.endpoints import servicios
 router.include_router(servicios.router, prefix="/servicios", tags=["Pagos de Servicios"])
+
+# ── Sprint 3: Alertas ──
+from app.api.v1.endpoints import alertas
+router.include_router(alertas.router, prefix="/alertas", tags=["Alertas"])
