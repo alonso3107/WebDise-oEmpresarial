@@ -21,7 +21,7 @@ def get_db() -> Generator[Session, None, None]:
         db.close()
 
 
-# TODO Sprint 1 (Dev A):
+# TODO Sprint 1 (Gonzalo):
 # - get_current_user(token, db) -> Usuario
 # - get_current_active_user(current_user) -> Usuario
 # - require_admin(current_user) -> Usuario  (verificar rol Administrador)

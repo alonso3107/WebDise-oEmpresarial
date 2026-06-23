@@ -10,3 +10,7 @@
 **/.venv/
 .pytest_cache/
 
+# Base de datos y editores
+*.db
+*.sqlite3
+.vscode/
