@@ -1,0 +1,1534 @@
+﻿Universidad Tecnológica del Perú 
+Facultad De Ingeniería  
+Carrera Profesional de Ingeniería de Sistemas e Informática 
+Curso: 
+Diseño e Implementación de Arquitectura Empresarial
+Tema: 
+Proyecto Integrador
+Integrantes: 
+Fernandez Leiva, Jhonny Alexander
+Flores Canahuire, Marlon Alonso
+Gutierrez Huamani, Diogo
+Huaman Gutierrez, Samuel Gonzalo
+Tejeda Morón, Diego Sebastian
+Docente: 
+Yngvar Jaime Merino Gomez
+Ciclo: 
+08
+Ica, 16 de abril de 2026 
+PROYECTO INTEGRADOR DE AE– APLICADO A LA MEJORA DE  LA EXPERIENCIA DEL CONSUMIDOR EN LA BOTICA V&R
+
+
+CAPÍTULO I: GENERALIDADES
+1. Datos de la cooperativa
+   * Nombre: Botica V&R
+   * RUC: 10433263630
+   * Domicilio: Ica – Perú
+   * Actividad principal: Venta de medicamentos al por menor
+2. Reseña histórica
+Fundación y Visión Inicial: La Botica V&R inició sus actividades hace tres años, en 2023, con el firme propósito de servir a nuestra urbanización. Fundada sobre los pilares de la ética farmacéutica y el compromiso social, nació para ofrecer mucho más que medicamentos: se propuso ser un aliado estratégico en el día a día de cada vecino.
+Crecimiento y Diversificación: En este corto pero intenso recorrido, V&R ha sabido escuchar las necesidades de su entorno. Lo que comenzó como una farmacia especializada, evolucionó rápidamente para integrar una línea completa de productos de belleza y cuidado personal, seleccionados cuidadosamente para realzar el bienestar de nuestra comunidad.
+Un Centro de Soluciones para el Vecino: Entendiendo el valor del tiempo de nuestros clientes, Botica V&R dio un paso importante en su consolidación como punto de referencia local. Con el objetivo de simplificar la vida de los vecinos, integramos servicios de valor añadido, convirtiéndonos en Agente BCP y facilitando el pago de servicios básicos como la luz. Esta integración permite que la comunidad realice sus gestiones financieras y trámites diarios en un entorno seguro, familiar y cercano, sin tener que salir de la urbanización.
+Compromiso y Futuro: A tres años de nuestra apertura, nos sentimos orgullosos de ser más que una botica; somos un punto de encuentro y apoyo. Agradecemos la confianza depositada en nosotros y renovamos nuestro compromiso de seguir creciendo, innovando y brindando esa atención personalizada que nos define, cuidando siempre de tu salud, tu belleza y tu tranquilidad.
+3. Problemática actual
+Actualmente, la Botica V&R enfrenta diversas dificultades operativas que limitan su crecimiento, reducen la eficiencia de sus procesos y afectan la calidad del servicio brindado a los clientes. La mayor parte de las actividades relacionadas con la gestión del negocio se realizan de forma manual, lo que genera demoras, errores y falta de control sobre la información crítica.
+Las principales problemáticas identificadas son las siguientes:
+* Procesos manuales en la gestión de inventario, ventas y pagos, lo que incrementa el riesgo de errores humanos y dificulta el control eficiente de las operaciones diarias.
+* Información imprecisa y poco actualizada sobre la disponibilidad de medicamentos y productos de cuidado personal, ocasionando dificultades para conocer el stock real y tomar decisiones oportunas de abastecimiento.
+* Limitada trazabilidad de la información financiera debido a la ausencia de herramientas digitales que permitan registrar, monitorear y auditar adecuadamente las transacciones realizadas en la botica.
+* Falta de alertas automáticas para el control de vencimientos y niveles mínimos de inventario, generando riesgos de pérdidas económicas por productos vencidos o desabastecimiento de medicamentos esenciales.
+* Ausencia de indicadores de gestión que permitan evaluar el desempeño del negocio, dificultando la toma de decisiones estratégicas basadas en información confiable.
+* Escasa incorporación de tecnologías de información para apoyar los procesos operativos y administrativos, limitando la competitividad y las oportunidades de mejora continua de la organización.
+Como consecuencia de estas deficiencias, la botica presenta dificultades para optimizar sus recursos, mejorar la experiencia del cliente y mantener un adecuado control de sus operaciones comerciales y financieras.
+CAPÍTULO II: PLANEAMIENTO ESTRATÉGICO
+Fase Preliminar: Definición de objetivos estratégicos y conformación del equipo de arquitectura.
+   * Visión: Aumentar la afluencia de clientes en el primer trimestre.
+   * Misión: Brindar un servicio amable, rápido y eficiente a nuestros clientes
+   * Valores: Responsabilidad, honestidad, compromiso, empatía, mejora continua.
+   * Objetivos estratégicos:
+      1. Modernizar la infraestructura tecnológica de la Botica V&R mediante la implementación de una plataforma web integrada que permita optimizar los procesos de ventas, inventario y control financiero. 
+      2. Reducir los tiempos de atención al cliente en un 30% durante los primeros seis meses de operación del sistema, mediante la automatización de los procesos de venta y consulta de inventario. 
+      3. Implementar un ecosistema digital seguro, accesible y escalable que garantice la protección de la información, la trazabilidad de las operaciones y la disponibilidad de los servicios para los usuarios autorizados. 
+      4. Mejorar la gestión del inventario mediante el monitoreo en tiempo real del stock y la generación automática de alertas de productos próximos a vencer o con niveles críticos de existencia. 
+      5. Incrementar la satisfacción y fidelización de los clientes en un 20% a través de una atención más rápida, personalizada y basada en información actualizada. 
+      6. Fortalecer la toma de decisiones gerenciales mediante la generación de reportes e indicadores de desempeño (KPIs) que permitan evaluar la rentabilidad, las ventas y el comportamiento del inventario.
+
+
+CAPÍTULO III: ANÁLISIS ORGANIZACIONAL
+1. Fase Arquitectura de Visión: Identificación del problema y formulación de la visión empresarial centrada en la integración tecnológica.
+1. Organigrama
+Organigrama Actual (AS-IS)
+  
+
+Mejoras aplicadas al organigrama:
+   * El organigrama entiende las funciones críticas
+   * El sistema está integrado en el organigrama
+1. Área de Operaciones y Dispensación
+   1. Funciones: Atención al público, interpretación de recetas y dispensación física de medicamentos.
+   2. Gestión Manual: Registro de las ventas en el cuaderno de ventas diarias y emisión de boletas manuales:
+   3. Responsable: Técnicos en Farmacia
+2. Área de Logística y Almacenamiento
+   1. Funciones: Recepción de mercadería, verificación de facturas contra productos físicos y organización.
+   2. Gestión Manual: Actualización del Kardex en tarjetas físicas para anotar ingresos y salidas. También, limpieza y control estricto en la ordenación alfabética.
+   3. Responsable: Encargado del almacén o el personal técnico en horarios de baja afluencia.
+
+
+2. Fase de Arquitectura de negocio (mapa de procesos clave).
+  
+
+2. Diagnóstico de procesos
+Requerimientos de negocio:
+* Confianza y Cercanía: El cliente busca al "vecino experto". Al ser pocos clientes, la atención debe ser muy personalizada para asegurar que regresen.
+* Disponibilidad Garantizada: Con pocos clientes, no puedes permitirte decir "no hay". Cada venta perdida impacta mucho más que en una cadena grande.
+* Asesoría Integral: El vecino espera que, además de la medicina, le orientes sobre el uso de productos de belleza que ve en el mostrador.
+Análisis de los Requerimientos :  
+A. El Valor de la Confianza y el Reconocimiento
+* Vínculo Vecinal: El negocio requiere que el sistema actúe como una "memoria compartida". El objetivo es que, aunque pasen muchos clientes, el encargado pueda recordar las preferencias de cada vecino, reforzando ese trato cercano y humano que las grandes cadenas no pueden ofrecer.
+* Asesoría que Cuida: Más que vender un producto, el requerimiento es brindar tranquilidad. El negocio necesita herramientas que ayuden al encargado a explicar con seguridad qué está llevando el cliente, especialmente cuando se trata de productos para bebés o cuidado personal.
+B. La Tranquilidad de Estar Siempre Preparados
+* Promesa de Disponibilidad: Para una botica de barrio, decir "no lo tengo" es fallarle a un vecino que confía en nosotros. El negocio requiere un control de inventario que garantice que los medicamentos esenciales (genéricos y de marca) estén siempre en el estante, evitando que el cliente tenga que caminar más lejos.
+* Recomendación Honesta: Cuando un medicamento falte, el negocio debe ser capaz de ofrecer una alternativa segura y efectiva (el "parecido") de inmediato, asegurando que el vecino no interrumpa su tratamiento por falta de stock.
+C. Cuidado del Patrimonio y Futuro del Local
+* Protección de la Inversión: Cada caja de medicamento representa el esfuerzo de 3 años de trabajo. El negocio requiere un sistema que "avise" sobre los vencimientos, para que ningún producto se pierda en el olvido del estante y se cuide cada sol invertido.
+* Crecimiento en Nuevas Áreas: El negocio busca que la sección de perfumería y artículos para niños no sea solo un adorno, sino una solución real para las madres y padres de la zona, diversificando lo que la botica ofrece a la comunidad.
+* Orden en el Esfuerzo Diario: Se requiere centralizar los pagos de servicios (luz, colegios) que hoy se hacen desde el celular, para que al final del día, el dueño pueda descansar con la certeza de que sus cuentas están claras y bajo control.
+Diagrama Causa-Efecto (Ishikawa)
+Problema Central: Bajo aprovechamiento de la visita del cliente 
+1. Personal (Mano de Obra)
+* Enfoque Transaccional: El personal actúa únicamente como "despachador", limitándose a entregar lo que el cliente pide sin explorar otras necesidades de salud o bienestar.
+* Falta de Proactividad Sugerida: No existe la práctica de ofrecer productos complementarios (ej. sugerir un bloqueador solar si el vecino lleva una crema para la piel) por falta de capacitación en técnicas de venta consultiva.
+2. Métodos (Procesos)
+* Ausencia de Seguimiento Posventa: No se cuenta con un registro (manual o digital) de clientes frecuentes que permita avisarles por WhatsApp sobre la llegada de medicamentos específicos o novedades en belleza.
+* Inexistencia de Estrategias de Fidelización: Al no haber un método de contacto, se pierde la oportunidad de generar una recompra programada, dejando que el cliente decida al azar dónde comprar la próxima vez.
+3. Tecnología (Maquinaria)
+* Herramientas de Control Básicas: El uso de cuadernos o métodos manuales impide tener alertas automáticas sobre productos próximos a vencer (con 3 a 6 meses de anticipación).
+* Brecha Digital en Inventario: La falta de un sistema impide conocer en tiempo real qué productos de alta rotación están por agotarse, arriesgando la pérdida de la venta por falta de stock inmediato.
+4. Entorno (Materiales/Ambiente)
+* Barreras Visuales en el Local: Los productos de belleza y cuidado personal están ubicados en zonas poco atractivas, muy altas o detrás de cristales, impidiendo que el cliente los toque o lea sus beneficios.
+* Distribución Poco Estratégica: El local no está configurado para invitar al cliente a recorrer otras áreas (perfumería, bebés), limitando su experiencia solo al mostrador de medicinas.
+5. Medición (Gestión)
+* Invisibilidad del Comportamiento del Cliente: No se realiza un seguimiento de la rotación, lo que impide saber con certeza qué productos se quedan estancados y cuáles son los favoritos de la comunidad.
+* Falta de Indicadores (KPIs): Al no medir el impacto de las pocas promociones realizadas, el dueño no tiene datos para ajustar sus estrategias comerciales y mejorar la rentabilidad del negocio.
+
+
+
+
+  
+
+  Factores Críticos de Éxito (FCE)
+1. Fidelización de Proximidad: Implementar un seguimiento personalizado. Si un ue se le acabe. Esto asegura flujo constante.vecino compra algo para la presión, recordarle su reposición antes de q
+2. Gestión de Inventario "Sano": Priorizar la compra de productos de belleza de alta rotación (los más usados en la zona) para evitar tener capital estancado en productos caros que no salen.
+3. Exhibición Estratégica: Reubicar los productos de belleza al nivel de la vista en la zona de espera. Con 20 personas al día, el "vitrineo" es tu mejor vendedor mientras preparas la receta.
+4. Capacitación en Venta Cruzada: Entrenar al personal para que identifique necesidades. Si un cliente busca algo para el sol, debe saber recomendar una rutina de limpieza facial básica de las que vendes.
+CAPÍTULO IV: PROPUESTA DE SOLUCIÓN
+3. Fase de Arquitectura de Sistemas de información datos y aplicaciones.
+Unidad 1: Gestión de Requerimientos Entregables:
+REQUERIMIENTOS FUNCIONALES
+* RF01: Integración de sistemas internos:
+   * El sistema debe interconectar las áreas de farmacia, productos de belleza y servicios financieros (Agente BCP) para centralizar la información
+* RF02: Registro de solicitudes de crédito en línea:
+   * El sistema debe permitir al personal autorizado gestionar y registrar sus solicitudes de crédito de manera digital.
+* RF03: Gestión automatizada de inventarios:
+   * Debe proporcionar información precisa y en tiempo real sobre el stock de medicamentos y productos de cuidado personal para eliminar la ambigüedad actual.
+* RF04: Módulo de ahorros y créditos:
+   * El módulo debe permitir el cuadre de caja específico para las operaciones de servicios financieros, separándolas de la venta de productos. 
+REQUERIMIENTOS NO FUNCIONALES
+* RNF01:Disponibilidad del sistema:
+   * El sistema debe garantizar una operatividad de 24/7 con un tiempo de actividad mínimo del 99.5%.
+* RNF02: Infraestructura en la nube:
+   * El sistema debe estar preparado para una migración o despliegue en entornos Cloud para asegurar escalabilidad.
+* RNF03: Seguridad de la información:
+   * Debido al manejo de transacciones bancarias (BCP) y datos personales, el entorno debe cumplir con estándares de seguridad que garanticen la confidencialidad en los trámites diarios, además de ello separándolo en roles específicos para cada trabajador correspondiente.
+* RNF04: Integridad de datos:
+   * El sistema debe asegurar que la información financiera sea trazable y no sufra alteraciones manuales no autorizadas.
+* Matriz MoSCoW /Cambiarlo a español/
+
+
+Categoría
+	Requerimiento
+	Justificación Técnica
+	Must Have/Debe tener
+	RF03: Gestión automatizada de inventarios.
+RF04: Módulo de ahorros y créditos
+RNF03: Seguridad de la información
+	Sin inventario no hay venta; sin cuadre de caja hay pérdida de dinero. La seguridad es crítica para evitar pérdidas financieras
+	Should Have/Debería tener
+	RF01: Integración de sistemas internos
+RNF04: Integridad de datos
+	La integración centralizada es el objetivo del proyecto, pero el sistema puede operar por módulos mientras se estabiliza
+	Could Have/Podria tener
+	RF02: Registro de solicitudes de crédito en línea
+RNF01: Disponibilidad del sistema
+	El crédito se puede seguir manejando "a la antigua" un tiempo más. La disponibilidad 24/7 es un ideal, pero en el local se depende del fluido eléctrico. 
+	Won´t Have/No se implementara
+	
+
+	
+
+	
+
+Documentación de Requerimientos
+El Documento de Especificación de Requerimientos (DER) tiene como finalidad definir de manera clara y estructurada las funcionalidades del sistema propuesto para la Botica V&R, así como las restricciones técnicas y criterios de calidad que permitirán mejorar la gestión de ventas, inventario y atención al cliente.
+El sistema estará orientado a optimizar los procesos internos mediante la digitalización, garantizando eficiencia operativa y una mejor experiencia del consumidor.
+* Modelo de procesos actuales y mejorados (BPMN).
+BPMN actual
+* Caso de uso actual
+  
+
+  
+
+El diagrama muestra cómo interactúan el cliente y el técnico en farmacia dentro del proceso actual de ventas de la Botica V&R. En este caso, se trata de un sistema bastante básico, ya que la mayoría de las actividades se realizan de forma manual.
+Actualmente, tareas como registrar las ventas, controlar el inventario y emitir comprobantes no están automatizadas, lo que puede generar demoras, errores y poca claridad en la información. Esto dificulta llevar un buen control del negocio y tomar decisiones basadas en datos confiables.
+* Ejemplo:
+* Requerimiento funcional: “El sistema debe permitir registrar solicitudes de crédito en línea”.
+* No funcional: “El sistema debe garantizar disponibilidad 24/7 con un uptime del 99.5%”.
+Fase de Arquitectura de Aplicaciones: 
+Dada la escala operativa de la Botica V & R (20 clientes al día y 2 trabajadores), realizará un ecosistema de aplicación única ligera. El objetivo es centralizar la atención al cliente, el inventario y el recuento de caja en una interfaz web minimalista.
+1. Descripción del ecosistema de aplicaciones
+Principalmente se busca hacer la web de gestión vecinal donde integrará tres módulos en la plataforma.
+1. Módulo de Ventas (CRM ligero): Dentro de ello se hará una interfaz en HTML/CSS/JS para registrar ventas rápidamente, permitiendo al técnico visualizar el historial de compras del vecino para ofrecer una atención personalizada y proactiva.
+2. Módulo de control de inventario: Aplicación lógica en PHP (se verá si se implementa con Laravel) que consulta el stock en tiempo real desde Excel. Además, generará alertas visuales automáticas para productos próximos a vencer (rango de 3 a 6 meses) y stock mínimo de medicamentos esenciales.
+3. Módulo de cuadre de caja híbrido: Para no perder la trazabilidad cuando haga flujos de efectivo en Agente BCP y pagos de luz, se aplicará esta funcionalidad específica con el fin de separar los ingresos de farmacia, asegurando la seguridad financiera sin errores manuales.
+2. Stack Tecnológico de la arquitectura:
+   1. Frontend (UI): Se utilizará HTML5, CSS3 y JavaScript para crear esta herramienta fluida y de carga rápida en cualquier navegador del local.
+   2. Backend (Lógica de Negocio): El lenguaje de programación PHP actuará como el motor que procesa las transacciones, gestionando los roles de acceso para tener operatividad en gestión de problemas y de acceso (con el fin de que si hay un error más adelante pueda hallarse la raíz o evitando que suceda más veces), comunicando la web con el repositorio de datos.
+   3. Capa de Datos (Persistencia): Se empleará tablas de Excel como base de datos local (sincronizada con OneDrive), permitiendo el manejo familiar de la información y backups automáticos en la nube.
+   4. Capa de BI: Integración con Power BI para que la dueña pueda visualizar KPIs críticos, como la rotación de productos de belleza y el comportamiento de compra de la comunidad, transformando los datos del Excel en decisiones estratégicas para la botica.
+3. Flujo de información simplificado.
+   1. Entrada: El trabajador ingresa la venta en la interfaz web.
+   2. Procesamiento: El script en PHP valida el stock y calcula el total de la venta.
+   3. Almacenamiento: Los datos se escriben directamente en el archivo maestro de Excel, actualizando el inventario y el diario de ventas.
+   4. Visualización: La dueña abre su tablero de Power BI para ver el resumen del día, utilidades y alertas de vencimiento de forma gráfica.
+4. Beneficios
+   1. Reducción del Tiempo: Se estima cumplir con el objetivo estratégico de reducir los tiempos de atención en un 30% (ya dicho en los objetivos) al eliminar el registro en cuadernos físicos.
+   2. Seguridad y Roles: El sistema restringirá mediante PHP que solo el dueño acceda a los reportes financieros en Power BI, mientras los técnicos operan solo la venta e inventario.
+   3. Costo casi nulo: Al utilizar estas herramientas ya disponibles como Excel  y PHP, se evita la inversión en software corporativo costoso, enfocando los recursos en la atención a la comunidad.
+
+
+
+
+4. Fase de Arquitectura tecnológica 
+DESCRIPCIÓN GENERAL
+En el caso de BOTICA V&R , se propone una arquitectura basada en servicio de herramientas de hojas de cálculo con funciones de base de datos local en excel, que permita la integración de sistemas, el acceso remoto y la protección de la información de los productos.
+DISEÑO DE LA INFRAESTRUCTURA TECNOLÓGICA
+La infraestructura tecnológica se implementará bajo un modelo de computación en la PC local (BACKUP), permitiendo flexibilidad y reducción de costos operativos.
+Componentes principales:
+* Base de datos: almacenamiento centralizado de información
+* Sistema de respaldo (backup): copias de seguridad
+
+
+MODELO DE DESPLIEGUE
+Se propone un modelo web con Base de datos en Excel:
+* Acceso desde navegadores 
+* Disponibilidad 24/7
+* Escalabilidad según demanda
+
+
+IMPLEMENTACIÓN:
+* Web local
+* Base de datos alojada localmente, guardado en nube.
+* Configuración de dominios y acceso seguro (HTTPS)
+1. SEGURIDAD TECNOLÓGICA
+Debido a que la botica maneja transacciones con POS y datos personales de salud de los vecinos, la seguridad no sólo será técnica, sino de cumplimiento. A continuación se mostrará partes para ramificar la seguridad tecnológica.
+* Autenticación y Roles: Implementación de acceso basado en roles. El personal técnico tendrá acceso a ventas e inventario, mientras que solo el gerente podrá ver reportes financieros y trazabilidad de créditos.
+* Cifrado de Datos: Uso obligatorio de protocolos HTTPS/SSL para todas las comunicaciones entre la interfaz web y Excel, garantizando la confidencialidad de los trámites diarios.
+* Protección de la Inversión: Se realizará backups diarios de Excel para evitar la pérdida de información sobre el stock.
+* Despliegue de Excel: Se acomodará el Excel hacia la nube utilizando OneDrive para un acceso controlado y probables backups automáticos.
+* Trazabilidad: El sistema registrará cada movimiento manual de inventario o dinero, asegurando que la información financiera no sufra alteraciones no autorizadas.
+Roadmap de Implementación Tecnológica
+El plan va a priorizar la digitalización de inventario y la trazabilidad financiera concisa.
+* Mes 1:
+   * Estructuración de Datos y Diagnóstico: Limpieza total del stock físico para crear las tablas muestras en Excel (Medicamentos, Perfumería, Vencimientos). Definición de los campos necesarios para registrar las operaciones del POS de forma independiente.
+* Mes 2:
+   * Desarrollo del Frontend: En este mes se verá el diseño de la aplicación web enfocada a la venta consultiva y creación de pantallas para búsqueda rápida de stock por laboratorio y recomendaciones de productos similares.        
+* Mes 3:
+   * Conectividad entre el Frontend y Excel: Implementación de la lógica para que el frontend lea y escriba datos en el Excel local.
+* Mes 4:
+   * Módulo de Alertas y Trazabilidad: En este presente tiempo se tendrá que programar alertas automáticas en el frontend para detectar productos próximos a vencer basándose en las fechas del Excel.
+* Mes 5:
+   * Seguridad y Control De Roles: Aplicación de controles de acceso en el frontend para que solo el personal autorizado maneje los registros de caja. Consiguiendo de esta forma, pruebas de integridad para asegurar que los datos del Excel no se alteren manualmente.
+Resultado de la Fase de Arquitectura Tecnológica
+        Al finalizar este proceso, la botica V&R contará con los siguientes activos.
+1. Sistema de Gestión Integrado:
+   1. Una herramienta funcional que centraliza las áreas de farmacia y belleza, eliminando la ambigüedad en la cantidad de medicamentos.
+2. Módulo de Cuadre de Caja para POS:
+   1. Capacidad  técnica para separar los ingresos por venta de productos de los movimientos de servicios financieros.        
+3. Gestión Inteligente de Inventario:
+   1. Un sistema que avisará sobre vencimientos y stock mínimo basándose en Excel, evitando pérdidas económicas y asegurando que siempre haya genéricos y marcas disponibles.        
+4. Trazabilidad Financiera:
+   1. Registro digital de cada transacción que permite al dueño realizar cierres de caja claros y sin errores manuales.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+VERSIÓN 1.0.0
+
+
+TOGAF – FASE A Y FASE B
+BOTICA V&R
+
+
+TOGAF – FASE A: VISIÓN DE ARQUITECTURA
+1. Declaración de Trabajo de Arquitectura
+Nombre del Proyecto
+Implementación de un Ecosistema Digital Integrado para la Gestión Operativa de la Botica V&R.
+Alcance
+El proyecto abarca la digitalización de los procesos principales de:
+* Ventas y atención al cliente.
+* Gestión de inventario y vencimientos.
+* Servicios financieros (Agente BCP).
+* Control y trazabilidad financiera.
+* Gestión de productos de belleza y cuidado personal.
+
+
+2.Objetivo General
+Modernizar la operación de la Botica V&R mediante una plataforma digital integrada que permita mejorar la experiencia del cliente, optimizar el control del inventario y asegurar la trazabilidad financiera.
+Objetivo Estratégico
+	Indicador KPI
+	Meta
+	Reducir tiempos de atención
+	Tiempo promedio por venta
+	Reducir 30%
+	Mejorar disponibilidad de productos
+	Nivel de stock disponible
+	95%
+	Reducir pérdidas por vencimiento
+	Productos vencidos por mes
+	Reducir 80%
+	Incrementar ventas cruzadas
+	Ventas de productos belleza
+	+25%
+	Mejorar trazabilidad financiera
+	Errores de caja registrados
+	0 errores
+	
+
+3. Visión de Arquitectura
+La Botica V & R implementará una arquitectura empresarial enfocada en la transformación digital de sus procesos críticos, integrando ventas, inventario, servicios financieros y atención personalizada mediante una plataforma web ligera.
+La solución permitirá:
+* Centralizar la información.
+* Controlar inventarios en tiempo real.
+* Gestionar alertas de vencimiento.
+* Mejorar la atención al cliente.
+* Implementar seguridad y trazabilidad financiera.
+* Integrar módulos de ventas, inventario y caja.
+
+
+4. Requisitos de Arquitectura Preliminar
+Requerimientos Funcionales
+Código
+	Descripción
+	RF01
+	Integración de sistemas internos
+	RF02
+	Registro de solicitudes de crédito
+	RF03
+	Gestión automatizada de inventario
+	RF04 
+	Módulo de ahorro y créditos
+	
+
+
+
+
+
+
+
+
+
+Requerimientos No Funcionales
+
+
+Código
+	Descripción
+	RNF01
+	Disponibilidad 24/7
+	RNF02
+	Infraestructura Cloud
+	RNF03
+	Seguridad de la información
+	RNF04
+	Integridad de datos
+	
+5. Matriz de Mapa de Partes Interesadas
+Stakeholder
+	Interés
+	Nivel de Influencia
+	Necesidad
+	Dueño/Gerente
+	Alto
+	Alto
+	Control total del negocio
+	Técnicos
+	Alto
+	Medio
+	Facilidad de uso
+	Clientes
+	Alto
+	Bajo
+	Atención rápida
+	Área financiera
+	Medio
+	Medio
+	Trazabilidad
+	Almacén
+	Alto
+	Medio
+	Stock actualizado
+	
+
+6. Diagrama del Modelo de Negocio  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+8. Mapa de Flujo de Valor   
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+9. Diagrama de Cadena de Valor  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+10. Diagrama del Concepto de Solución  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TOGAF – FASE B: ARQUITECTURA DE NEGOCIO
+1. Arquitectura Actual (AS-IS)
+Actualmente la Botica V&R trabaja con procesos manuales:
+* Registro de ventas en cuadernos.
+* Inventario manual.
+* Sin alertas automáticas.
+* Control financiero limitado.
+* Escasa trazabilidad de información.
+2. Arquitectura Objetivo (TO-BE)
+La arquitectura objetivo plantea:
+* Sistema integrado web.
+* Inventario automatizado.
+* Alertas automáticas.
+* Roles y seguridad.
+* Historial de clientes.
+* Control financiero digital.
+* Integración de ventas y servicios BCP.
+3. Análisis de Brechas (GAP Analysis)
+Situación Actual
+	Situación Objetivo
+	Brecha
+	Inventario manual
+	Inventario automatizado
+	Falta  de sistema
+	Ventas en cuaderno
+	Ventas digitales
+	Digitalización
+	Sin alertas
+	Alertas automáticas
+	Automatización
+	Sin trazabilidad
+	Registro financiero
+	Seguridad
+	Atención 
+	Atención personalizada
+	CRM ligero
+	4. Matriz de Riesgos
+ID
+	Riesgo
+	Probabilidad
+	Impacto
+	Mitigación
+	R1
+	Resistencia al cambio por parte del personal
+	Media
+	Alta
+	Capacitación continua
+	R2
+	Errores en la migración de datos
+	Media
+	Alta
+	Pruebas y respaldos previos
+	R3
+	Caída del servicio de internet
+	Media
+	Media
+	Conexión de respaldo
+	R4
+	Accesos no autorizados
+	Baja
+	Alta
+	Roles y autenticación segura
+	R5
+	Pérdida de información
+	Baja
+	Alta
+	Backups automáticos diarios
+	
+
+5.Impactos en el entorno Arquitectónico
+Área
+	Impacto
+	Personal
+	Capacidad Tecnológica
+	Procesos
+	Automatización
+	Seguridad
+	Nuevos Controles
+	Infraestructura 
+	Uso de la nube 
+	Atención
+	Mayor Rapidez
+	
+
+6. Documento de Definición de Arquitectura
+Arquitectura de Negocio
+La arquitectura empresarial propuesta busca transformar la Botica V&R en una organización digitalizada y eficiente, enfocada en:
+* Fidelización del cliente.
+* Optimización operativa.
+* Seguridad financiera.
+* Gestión inteligente del inventario.
+* Integración tecnológica.
+8.Procesos Comerciales
+Procesos
+	Resultados
+	Venta
+	Venta Registrada
+	Inventario
+	Stock Actualizado
+	Caja
+	Cuadro Correcto
+	Alertas
+	Prevencion de Perdidas 
+	Atención 
+	Fidelización
+	
+
+9. Diagramas Conceptuales
+Diagramas que se agregarán posteriormente
+* Diagrama del modelo de negocio.
+* Mapa organizacional.
+* Diagrama de caso de uso del negocio.
+* Diagrama de flujo del proceso.
+* Diagrama conceptual de solución.
+* Mapa de capacidades empresariales.
+* Mapa de flujo de valor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+10. Diagrama de Flujo del Proceso  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EN PROCESO
+VERSIÓN 2.0.0
+EN PROCESO
+VERSION 2.0.1
+FASE C: ARQUITECTURA DE SISTEMAS DE INFORMACIÓN 
+El objetivo de esta fase es definir los modelos lógicos de los datos y las aplicaciones que permitirán eliminar los procesos manuales (registro en cuadernos) y la falta de control de inventario de la Botica V&R.
+1. Arquitectura de Datos (Data Architecture)
+Define cómo se estructurará, almacenará y gestionará la información del negocio de manera lógica y relacional.
+1.1. Catálogo de Entidades de Datos Principales
+* Entidad Producto: Código de barra, nombre comercial, principio activo (genérico/marca), laboratorio, lote, fecha de vencimiento, precio de compra, precio de venta, stock mínimo y stock actual.
+* Entidad Venta: ID de venta, fecha/hora, tipo de comprobante (Boleta/Ticket), estado (completado/anulado), monto total y método de pago (Efectivo/Yape/Plin).
+* Entidad Detalle_Venta: ID detalle, ID venta, código de producto, cantidad vendida y subtotal.
+* Entidad Usuario/Personal: DNI, nombres, rol (Administrador/Vendedor) y credenciales encriptadas.
+1.2. Modelo Lógico de Datos (Estrategia de Almacenamiento)
+Se opta por un enfoque relacional estructurado mediante PostgreSQL. Las relaciones lógicas clave son:
+* Una Venta genera múltiples registros en Detalle_Venta.
+* Cada registro en Detalle_Venta hace referencia a un Producto, reduciendo automáticamente su stock actual.
+* Se definen restricciones de integridad lógicas para impedir la venta de productos con stock en cero o cuya fecha de vencimiento haya caducado.
+2. Arquitectura de Aplicaciones (Application Architecture)
+Define el catálogo de aplicaciones y servicios requeridos para operar el negocio y automatizar las actividades comerciales.
+2.1. Catálogo de Aplicaciones del Sistema (Módulos del Sistema Web)
+* Módulo de Autenticación y Seguridad: Control de acceso seguro para el dueño de la botica y sus vendedores.
+* Módulo de Gestión de Ventas (Punto de Venta - POS): Interfaz rápida para buscar medicamentos por nombre o principio activo, agregar al carrito de compras, seleccionar el método de pago y procesar la salida de productos en tiempo real.
+* Módulo de Gestión de Inventario: Panel de control para registrar el ingreso de nuevos lotes, actualizar stock físicos y clasificar los medicamentos alfabéticamente por laboratorios.
+* Módulo de Alertas Automáticas: Servicio lógico que analiza diariamente la base de datos para generar notificaciones visuales sobre:
+   * Productos próximos a vencer (3 meses de anticipación).
+   * Productos con stock crítico (por debajo del stock mínimo configurado).
+2.2. Modelo de Integración de Aplicaciones
+La interacción entre los componentes lógicos se define mediante servicios desacoplados:
+* El front-end (interfaz de usuario) interactúa con el back-end de manera asíncrona mediante un protocolo REST API, enviando datos en formato JSON para no sobrecargar el sistema.
+FASE D: ARQUITECTURA TECNOLÓGICA (AT)
+La Arquitectura Tecnológica define el plano físico y de infraestructura de hardware, redes y plataformas que darán soporte a los sistemas de información de la Fase C.
+1. Infraestructura de Hardware y Redes (Hardware and Network Infrastructure)
+* Dispositivos de Entrada/Salida (Punto de Venta): Una Computadora de escritorio o laptop en la botica con acceso a navegador web, conectada a una ticketera térmica (impresión de comprobantes) y opcionalmente a un lector de código de barras USB.
+* Conectividad: Enlace de red local mediante un router con conexión a Internet de banda ancha estable (mínimo 40 Mbps) para asegurar la comunicación fluida con la base de datos en la nube.
+2. Entorno de Plataformas y Despliegue (Platform Environment)
+Basado estrictamente en las tecnologías seleccionadas para el proyecto del ciclo, el ecosistema de despliegue físico y técnico se distribuye de la siguiente manera:
+      2.1. Capa de Presentación (Front-end Cloud)
+* Tecnología: React.js / Vite (para una interfaz rápida, interactiva y de carga ligera en el navegador del punto de venta).
+           2.2. Capa de Lógica de Negocio (Back-end Cloud)
+* Tecnología: Python con FastAPI. Maneja las solicitudes de ventas, lógica de alertas y procesamiento de stock de manera eficiente.
+2.3. Capa de Persistencia (Database Cloud)
+* Servicio de Base de Datos: PostgreSQL hospedado en la nube . Esto asegura que la información de las ventas e inventarios no dependa de una computadora local en la botica, evitando pérdidas ante robos o fallas de disco duro (Garantía de Respaldo y Trazabilidad Financiera).  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 3. Criterios de Calidad Tecnológica (Atributos de Calidad)
+   * Seguridad: Toda comunicación entre el punto de venta y los servidores en la nube (Render/Vercel) viajará encriptada mediante certificados de seguridad SSL/TLS (HTTPS).
+   * Disponibilidad: Al utilizar servicios en la nube consolidados, se garantiza una disponibilidad de los servicios del 99.9%, permitiendo que la botica opere sin interrupciones en su horario comercial.
+Arquitectura Empresarial / Togaf: Fase E- Oportunidades Y Soluciones
+1. Objetivo de la Fase E
+La Fase E tiene como propósito identificar las oportunidades de mejora y definir las soluciones que permitirán cerrar las brechas detectadas entre la arquitectura actual (AS-IS) y la arquitectura objetivo (TO-BE) de la Botica V&R. Asimismo, se establecen los proyectos de implementación necesarios para lograr la transformación digital del negocio, priorizando aquellas iniciativas que generen mayor valor para la organización.
+2. Oportunidades de Mejora Identificadas
+A partir del análisis realizado en las fases anteriores, se identificaron las siguientes oportunidades de mejora:
+Oportunidad 1: Automatización del Proceso de Ventas
+Actualmente el registro de ventas se realiza de forma manual, lo que genera demoras y posibles errores en la información.
+Solución propuesta:
+Implementar un sistema web que permita registrar las ventas en tiempo real y generar comprobantes de manera automática.
+Oportunidad 2: Optimización del Control de Inventario
+La gestión manual del inventario dificulta conocer con exactitud el stock disponible y los productos próximos a vencer.
+Solución propuesta:
+Implementar un módulo de inventario que actualice automáticamente las existencias y genere alertas de stock mínimo y vencimiento.
+Oportunidad 3: Fortalecimiento del Control Financiero
+El control de ingresos y gastos se realiza mediante registros manuales, limitando la generación de información financiera confiable.
+Solución propuesta:
+Implementar un módulo financiero que permita registrar ingresos, gastos y movimientos de caja de manera centralizada.
+Oportunidad 4: Implementación de Reportes e Indicadores
+Actualmente no existen herramientas que permitan visualizar información estratégica para la toma de decisiones.
+Solución propuesta:
+Incorporar reportes gerenciales e indicadores de desempeño mediante herramientas de analítica de datos.
+3. Mapa de Oportunidades y Soluciones
+El siguiente mapa relaciona las oportunidades de mejora identificadas en la organización con las soluciones tecnológicas propuestas para alcanzar la arquitectura objetivo.
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4. Solución Arquitectónica Propuesta
+La solución propuesta consiste en la implementación de una plataforma tecnológica integrada que permita automatizar los procesos de ventas, inventario, finanzas y gestión administrativa de la Botica V&R.
+La arquitectura estará compuesta por una aplicación web para los usuarios, un conjunto de servicios de negocio para procesar la información y una base de datos centralizada para almacenar los registros de la organización.
+El detalle de la arquitectura propuesta se presenta en el Diagrama del Concepto de Solución desarrollado en las secciones anteriores del presente documento.
+5. Proyectos de Implementación
+Para lograr la arquitectura objetivo se plantean los siguientes proyectos:
+Código
+	Proyecto
+	P1
+	Implementación de Base de Datos Centralizada
+	P2
+	Desarrollo del Módulo de Inventario
+	P3
+	Desarrollo del Módulo de Ventas
+	P4
+	Desarrollo del Módulo Financiero
+	P5
+	Implementación de Reportes e Indicadores
+	P6
+	Implementación del Sistema de Alertas
+	
+
+
+
+6. Priorización de Proyectos
+Con el fin de obtener beneficios en el corto plazo, los proyectos se priorizan de la siguiente manera:
+
+
+Proyecto
+	Prioridad
+	Implementación de Base de Datos
+	                 Alta
+	Módulo de Inventario
+	Alta
+	Módulo de Ventas
+	Alta
+	Módulo Financiero
+	Media
+	Reportes e Indicadores
+	Media
+	Sistema de Alertas
+	Media
+	
+
+
+
+
+
+7.  Roadmap de Implementación
+La implementación de la solución tecnológica se realizará de manera progresiva siguiendo las siguientes etapas:
+Etapa 1
+Implementación de la Base de Datos Centralizada.
+Etapa 2
+Implementación del Módulo de Inventario.
+Etapa 3
+Implementación del Módulo de Ventas.
+Etapa 4
+Implementación del Módulo Financiero.
+Etapa 5
+Implementación de Reportes e Indicadores.
+Etapa 6
+Implementación del Sistema de Alertas y Optimización Continua.
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+8. Matriz de Riesgos
+
+
+Riesgo
+	Probabilidad
+	Impacto
+	Plan de Mitigación
+	Resistencia al cambio por parte del personal
+	Media
+	Alta
+	Capacitación y acompañamiento continuo
+	Errores durante la migración de datos
+	Media
+	Alta
+	Realizar pruebas y copias de seguridad
+	Fallas de conectividad a Internet
+	Media
+	Media
+	Implementar conexión de respaldo
+	Acceso no autorizado a la información
+	Baja
+	Alta
+	Aplicar controles de acceso y autenticación
+	Pérdida de información
+	Baja
+	Alta
+	Realizar respaldos automáticos periódicos
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+9. Beneficios Esperados
+Beneficios Operativos
+   * Reducción del tiempo de atención al cliente. 
+   * Disminución de errores en los procesos de venta. 
+   * Actualización automática del inventario. 
+   * Mayor control sobre los productos disponibles. 
+Beneficios Financieros
+   * Mejor control de ingresos y gastos. 
+   * Reducción de pérdidas por productos vencidos. 
+   * Optimización de los recursos de la organización. 
+Beneficios Estratégicos
+   * Mayor satisfacción del cliente. 
+   * Disponibilidad de información en tiempo real. 
+   * Mejor toma de decisiones basada en datos. 
+   * Incremento de la competitividad de la Botica V&R.
+10. Resultado Esperado
+Con la implementación de las oportunidades y soluciones identificadas, la Botica V&R contará con una arquitectura empresarial moderna, integrada y alineada con sus objetivos estratégicos. La organización dispondrá de información confiable, procesos automatizados y herramientas tecnológicas que contribuirán a mejorar la eficiencia operativa, fortalecer el control de inventarios y optimizar la atención al cliente.
+ARQUITECTURA EMPRESARIAL / TOGAF: FASE F[a] – PLANIFICACIÓN DE LA MIGRACIÓN
+FASE F: PLANIFICACIÓN DE LA MIGRACIÓN
+1. Objetivo de la Fase F
+La Fase F tiene como propósito definir la estrategia de migración desde la arquitectura actual hacia la arquitectura objetivo, estableciendo el orden de implementación de los proyectos, los recursos necesarios, los plazos estimados y las acciones requeridas para minimizar riesgos durante el proceso de transformación.(Definir plazo exacto)
+2. Estrategia de Migración
+La migración se realizará de manera gradual con el fin de reducir el impacto en las operaciones de la Botica V&R y garantizar la continuidad de los servicios durante la implementación de la nueva solución tecnológica.
+La estrategia contempla la ejecución progresiva de los proyectos priorizados, iniciando por aquellos que proporcionan la infraestructura básica para el funcionamiento del sistema.
+3. Proyectos de Migración
+Fase
+	Proyecto
+	1
+	Implementación de Base de Datos
+	2
+	Implementación del Módulo de Inventario
+	3
+	Implementación del Módulo de Ventas
+	4
+	Implementación del Módulo Financiero
+	5
+	Implementación de Reportes e Indicadores
+	6
+	Implementación del Sistema de Alertas
+	
+
+
+
+
+
+
+
+4. Diagrama del Plan de Migración
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+5. Cronograma de Implementación
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+6. Recursos Necesarios
+Recursos Humanos
+   * Administrador del proyecto. 
+   * Desarrollador de software. 
+   * Personal de la botica. 
+   * Responsable financiero. 
+Recursos Tecnológicos
+   * Computadoras. 
+   * Conexión a Internet. 
+   * Servidor en la nube. 
+   * Base de datos PostgreSQL. 
+   * Herramientas de desarrollo. 
+7. Plan de Capacitación
+Para asegurar una adecuada adopción de la solución tecnológica, se realizarán capacitaciones dirigidas al personal de la organización.
+Las capacitaciones abarcarán:
+   * Registro de ventas. 
+   * Gestión de inventario. 
+   * Control financiero. 
+   * Generación de reportes. 
+   * Uso de alertas y notificaciones. 
+8. Gestión de Riesgos de la Migración
+Riesgo
+	Mitigación
+	Resistencia al cambio
+	Capacitación continua
+	Errores en migración de datos
+	Pruebas y respaldos previos
+	Fallas de conectividad
+	Conexión alternativa
+	Pérdida de información
+	Copias de seguridad automáticas
+	Problemas de configuración
+	Pruebas piloto antes de producción
+	
+
+
+
+
+
+
+
+
+
+
+
+9. Beneficios de la Migración
+   * Implementación ordenada y controlada. 
+   * Reducción de riesgos operativos. 
+   * Continuidad de los servicios. 
+   * Mejor aprovechamiento de recursos. 
+   * Mayor aceptación por parte de los usuarios. 
+
+
+10. Resultado Esperado
+Al finalizar el proceso de migración, la Botica V&R contará con una plataforma tecnológica completamente implementada, permitiendo automatizar sus procesos de negocio, mejorar la gestión de la información y fortalecer la toma de decisiones mediante herramientas digitales integradas.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ARQUITECTURA EMPRESARIAL / TOGAF: FASE G – GOBIERNO DE LA IMPLEMENTACIÓN
+FASE G: GOBIERNO DE LA IMPLEMENTACIÓN
+1. Objetivo de la Fase G
+La Fase G tiene como objetivo garantizar que la implementación de la arquitectura empresarial se realice conforme a los lineamientos, estándares y requerimientos definidos en las fases anteriores. Asimismo, busca asegurar que los proyectos ejecutados cumplan con los objetivos estratégicos de la Botica V&R y generen los beneficios esperados.(Definir el ISO)
+2. Estrategia de Gobierno
+La implementación de la solución tecnológica será supervisada mediante un proceso de seguimiento y control que permita verificar el cumplimiento de los requisitos funcionales, técnicos y de negocio establecidos para el proyecto.
+Se realizarán revisiones periódicas para evaluar el avance de cada proyecto y asegurar la correcta ejecución de las actividades programadas.(Definir tiempo periodico)
+3. Estructura de Gobierno
+Para la gestión y supervisión de la implementación se establecen los siguientes roles:
+Rol
+	Responsabilidad
+	Gerente de la Botica
+	Aprobar decisiones estratégicas
+	Jefe de Proyecto
+	Coordinar y supervisar la implementación
+	Desarrollador
+	Implementar la solución tecnológica
+	Personal de la Botica
+	Participar en pruebas y validaciones
+	Administrador del Sistema
+	Gestionar usuarios y configuración
+	
+
+
+
+
+
+
+
+Diagrama de Gobierno de la Implementación
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4. Matriz de Responsabilidades (RACI)
+Actividad
+	Gerente
+	Jefe de Proyecto
+	Desarrollador
+	Personal
+	Planificación
+	A
+	R
+	C
+	I
+	Desarrollo
+	I
+	C
+	R
+	I
+	Pruebas
+	I
+	C
+	R
+	R
+	Capacitación
+	A
+	R
+	C
+	R
+	Puesta en Producción
+	A
+	R
+	R
+	I
+	
+
+Leyenda:
+   * R = Responsable 
+   * A = Aprueba 
+   * C = Consultado 
+   * I = Informado
+
+
+5. Control de Cumplimiento
+Para garantizar el éxito de la implementación se verificará:
+   * Cumplimiento del cronograma. 
+   * Cumplimiento del presupuesto. 
+   * Cumplimiento de requisitos funcionales. 
+   * Cumplimiento de requisitos de seguridad. 
+   * Cumplimiento de estándares de calidad.
+
+
+6. Indicadores de Seguimiento
+Indicador
+	Meta
+	Avance del proyecto
+	100%
+	Cumplimiento de cronograma
+	≥ 90%
+	Disponibilidad del sistema
+	≥ 95%
+	Satisfacción de usuarios
+	≥ 90%
+	Errores críticos detectados
+	0
+	
+
+
+
+
+
+7. Gestión de Cambios
+Durante la implementación cualquier solicitud de cambio deberá ser evaluada por el responsable del proyecto antes de su aprobación.
+Las modificaciones deberán documentarse y analizarse para evitar impactos negativos sobre el alcance, tiempo y costo del proyecto.
+8. Beneficios del Gobierno de Implementación
+   * Control adecuado de los proyectos. 
+   * Reducción de riesgos. 
+   * Mejor calidad del sistema. 
+   * Cumplimiento de objetivos estratégicos. 
+   * Mayor satisfacción de los usuarios.
+9. Resultado Esperado
+Al finalizar la implementación, la Botica V&R dispondrá de una solución tecnológica completamente operativa, alineada con los objetivos del negocio y desarrollada bajo un marco de control que garantice calidad, seguridad y sostenibilidad.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ARQUITECTURA EMPRESARIAL / TOGAF: FASE H – GESTIÓN DEL CAMBIO DE ARQUITECTURA
+FASE H: GESTIÓN DEL CAMBIO DE ARQUITECTURA
+1. Objetivo de la Fase H
+La Fase H tiene como objetivo establecer mecanismos que permitan monitorear, evaluar y gestionar los cambios que puedan surgir en la arquitectura empresarial de la Botica V&R, garantizando que la solución implementada continúe alineada con las necesidades del negocio y los objetivos estratégicos de la organización.
+2. Gestión del Cambio
+La arquitectura empresarial deberá adaptarse continuamente a los cambios tecnológicos, operativos y estratégicos que puedan presentarse en la organización.
+Para ello se establecerá un proceso de revisión periódica que permita identificar oportunidades de mejora y aplicar los ajustes necesarios para mantener la eficiencia de los procesos y la calidad de los servicios. (Definir tiempo)
+3. Monitoreo de la Arquitectura
+Se realizarán evaluaciones periódicas para verificar:
+   * El correcto funcionamiento del sistema. 
+   * El cumplimiento de los objetivos del negocio. 
+   * La satisfacción de los usuarios. 
+   * El rendimiento de los procesos automatizados. 
+   * La disponibilidad y seguridad de la información.
+4. Solicitud de Cambios
+Toda solicitud de cambio deberá seguir el siguiente procedimiento:
+   1. Identificación de la necesidad de cambio. 
+   2. Registro de la solicitud. 
+   3. Evaluación del impacto. 
+   4. Aprobación del cambio. 
+   5. Implementación. 
+   6. Verificación de resultados. 
+   7. Documentación del cambio realizado.
+5. Evaluación del Impacto
+Antes de implementar cualquier modificación se analizará su impacto en:
+Aspecto
+	Evaluación
+	Procesos de negocio
+	Alto
+	Aplicaciones
+	Alto
+	Datos
+	Medio
+	Infraestructura tecnológica
+	Medio
+	Usuarios
+	Alto
+	
+
+6. Indicadores de Mejora Continua
+Indicador
+	Meta
+	Disponibilidad del sistema
+	≥ 95%
+	Satisfacción de usuarios
+	≥ 90%
+	Incidentes críticos
+	0
+	Tiempo de respuesta
+	≤ 3 segundos
+	Actualización de inventario
+	100%
+	
+
+
+
+
+
+
+
+7. Estrategia de Mejora Continua
+La Botica V&R adoptará una estrategia de mejora continua basada en la revisión constante de procesos, identificación de oportunidades de optimización y actualización tecnológica cuando sea necesario.
+Las mejoras serán implementadas de manera planificada para asegurar la continuidad operativa y minimizar impactos sobre los usuarios.(Establecer tiempo)
+Ciclo de Mejora Continua de la Arquitectura
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+8. Beneficios de la Gestión del Cambio
+   * Adaptación a nuevas necesidades del negocio. 
+   * Mayor vida útil de la arquitectura implementada. 
+   * Mejora continua de los procesos. 
+   * Mayor satisfacción de los usuarios. 
+   * Reducción de riesgos tecnológicos.
+
+
+9. Resultado Esperado
+La Botica V&R dispondrá de una arquitectura empresarial flexible y sostenible, capaz de adaptarse a los cambios del entorno, incorporar nuevas tecnologías y mantener un alto nivel de eficiencia operativa a lo largo del tiempo.
+
+
+ELEGIR UN PROCESO CLAVE DE LA BOTICA V&R
+   * Nombre del proceso: Gestión de Venta y Despacho de Medicamentos.
+   * Problema actual: El proceso depende totalmente de registros manuales en cuadernos físicos, lo que genera demoras operativas (32-37 minutos por cliente) y falta de control real sobre el stock.
+   * Razón por la que debería mejorar: La automatización es necesaria para reducir los errores humanos, garantizar la disponibilidad de medicamentos esenciales mediante alertas de stock y mejorar la experiencia del cliente para asegurar su fidelización.
+
+
+
+
+
+
+
+
+APLICAR UN MARCO DE ARQUITECTURA EMPRESARIAL (TOGAF)
+   * Explicación del marco: Elegimos TOGAF por ser el marco de trabajo estándar que ofrece un método estructurado (ADM) para el desarrollo de arquitectura empresarial, permitiendo alinear la tecnología con los objetivos estratégicos del negocio.
+   * Fase a aplicar: Aplicaríamos la Fase A (Visión de Arquitectura) para establecer los objetivos estratégicos, como la reducción de tiempos de atención, y la Fase C (Arquitectura de Sistemas de Información) para diseñar los módulos de ventas e inventario que soportarán estos objetivos.
+
+
+
+
+Metamodelo: Botica V&R : 
+
+
+Capa
+	Componente Específico 
+	Función en la Arquitectura
+	Negocio
+	Proceso de Venta de Farmacia (Atención al cliente y registro de inventario).
+	Define el valor, las metas (KPIs) y los roles (Administrador/Vendedor).
+	Datos
+	Maestro de Medicamentos, Registro de Stock y Base de Datos de Ventas.
+	Es el insumo crítico que alimenta las decisiones del negocio.
+	Aplicación
+	Sistema Web de Gestión (Backend PHP / Frontend Interfaz).
+	Automatiza los procesos de negocio y procesa los datos definidos.
+	Tecnología
+	Servidor, Framework de Desarrollo y Entorno de Base de Datos.
+	Es la infraestructura física/lógica que sostiene la aplicación.
+	
+
+Mapa de Procesos (AS-IS / TO-BE):
+AS-IS: Situación Actual (Proceso Manual)
+Descripción: Representa la operatividad actual basada en métodos tradicionales y analógicos.
+Puntos clave:
+   * La gestión depende totalmente del registro manual en cuadernos físicos, lo que genera demoras operativas (tiempo total de 32-37 minutos).
+   * La falta de herramientas digitales provoca una baja eficiencia del proceso (28% - 30%) y dificulta la obtención de reportes precisos para la toma de decisiones gerenciales.
+   * Existe una alta dependencia de la memoria y el trabajo físico del técnico, lo cual es propenso a errores humanos y falta de control real sobre el stock y las finanzas.
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+TO-BE: Situación Objetivo (Proceso Automatizado)
+Descripción: Define el estado futuro tras la implementación del sistema de gestión integrado que digitaliza la atención y el control operativo.
+Puntos clave:
+   * Se optimiza drásticamente el tiempo total de atención, reduciéndolo a 5-8 minutos mediante el registro automático en el sistema web.
+   * La eficiencia del proceso aumenta significativamente (75% - 85%), permitiendo que el inventario se actualice en tiempo real y se disponga de reportes confiables para la toma de decisiones estratégicas.
+   * Se garantiza la trazabilidad financiera, la precisión de los datos y una mejora en la experiencia del cliente gracias a la rapidez y confiabilidad del nuevo flujo automatizado.  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+[a]Ya se agrego la parte final y aparte se puso lo alineamientos que siguiere el docente en algunas partes desde Togaf F asta la H se agrego que se le debebe colocar entre ello esta definir el tiempo osea si es dos semanas o mas segun nuestro cronograma y aparte definir la ley ISO ,aparte definir bien los roles y decirlo en el documento. Avanzar asta maximo mañana por que se tiene que entregar el dia sabado tambien avanzar la ppt (Primero va solo conceptos de la empresa despues todo lo demas es togaf mas lo que esta al final del documento)

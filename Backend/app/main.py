@@ -21,6 +21,7 @@ from app.models.promocion import Promocion
 from app.models.venta import Venta
 from app.models.detalle_venta import DetalleVenta
 from app.models.pago_servicio import PagoServicio
+from app.models.movimiento_caja import MovimientoCaja
 
 
 @asynccontextmanager

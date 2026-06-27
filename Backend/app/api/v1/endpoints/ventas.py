@@ -98,6 +98,7 @@ def registrar_venta(data: VentaCreate, db: Session = Depends(get_db)):
         # ── Validar productos y stock ──
         detalles = []
         subtotal = 0.0
+        alertas_venta = []
 
         for item in data.items:
             producto = db.query(Producto).filter(Producto.id == item.producto_id).first()
@@ -111,6 +112,14 @@ def registrar_venta(data: VentaCreate, db: Session = Depends(get_db)):
                     status_code=400,
                     detail=f"El producto '{producto.nombre}' está desactivado",
                 )
+            
+            # ── Validar vencimiento (Sprint 3) ──
+            if producto.fecha_vencimiento and producto.fecha_vencimiento < date.today():
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Bloqueo de Seguridad: No se puede vender '{producto.nombre}' porque está vencido desde {producto.fecha_vencimiento}.",
+                )
+
             if producto.stock < item.cantidad:
                 raise HTTPException(
                     status_code=400,
@@ -158,6 +167,12 @@ def registrar_venta(data: VentaCreate, db: Session = Depends(get_db)):
             # Descontar stock
             det["producto"].stock -= det["cantidad"]
 
+            # ── Alerta de stock bajo en tiempo real (Sprint 3) ──
+            if det["producto"].stock <= det["producto"].stock_minimo:
+                alertas_venta.append(
+                    f"¡Atención! El stock de '{det['producto'].nombre}' cayó a {det['producto'].stock} (Mínimo requerido: {det['producto'].stock_minimo})."
+                )
+
         # ── Actualizar cliente si existe ──
         if data.cliente_id:
             cliente = db.query(Cliente).filter(Cliente.id == data.cliente_id).first()
@@ -175,6 +190,11 @@ def registrar_venta(data: VentaCreate, db: Session = Depends(get_db)):
 
         db.commit()
         db.refresh(venta)
+        
+        # Inyectar las alertas dinámicamente para que Pydantic las incluya en la respuesta
+        if alertas_venta:
+            setattr(venta, "alertas", alertas_venta)
+
         return venta
 
     except HTTPException:
@@ -191,7 +211,7 @@ def listar_ventas(
     skip: int = 0,
     limit: int = 50,
     estado: Optional[str] = Query(None, description="'completada' o 'anulada'"),
-    metodo_pago: Optional[str] = Query(None, description="'efectivo', 'yape', 'plin', 'tarjeta'"),
+    metodo_pago: Optional[str] = Query(None, description="'efectivo', 'yape' o 'plin'"),
     fecha: Optional[str] = Query(None, description="Filtrar por fecha (YYYY-MM-DD)"),
 ):
     """Listar ventas con filtros opcionales."""
