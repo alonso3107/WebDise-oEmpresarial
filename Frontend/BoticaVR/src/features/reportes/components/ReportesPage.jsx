@@ -31,7 +31,7 @@ function StatCard({ icon: Icon, label, value, suffix = '' }) {
 }
 
 export default function ReportesPage() {
-  const { ventasMensuales, productosTop, ingresosCat, resumen, filtroDesde, setFiltroDesde, filtroHasta, setFiltroHasta, exportarCSV } = useReportes();
+  const { ventasMensuales, productosTop, ingresosCat, resumen, filtroDesde, setFiltroDesde, filtroHasta, setFiltroHasta, exportarCSV, isLoading, error } = useReportes();
 
   const handleExportar = (tipo) => { exportarCSV(tipo); toast.success(`Reporte de ${tipo} descargado`); };
 
@@ -50,10 +50,8 @@ export default function ReportesPage() {
         </div>
       </div>
 
-      <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3">
-        <span className="text-amber-600 text-lg">⚠️</span>
-        <div><p className="text-sm font-medium text-amber-800">Datos de ejemplo</p><p className="text-xs text-amber-700 font-light italic mt-0.5">Los reportes usan datos simulados. Se conectarán al backend cuando se implementen los endpoints de estadísticas.</p></div>
-      </div>
+      {error && <div className="bg-red-50 border border-red-200 rounded-2xl p-4 text-sm text-red-700">{error}</div>}
+      {isLoading && <p className="text-sm text-[var(--color-texto-sec)]">Actualizando reportes…</p>}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard icon={DollarSign} label="Ingresos totales" value={`S/ ${resumen.ingresos_totales.toLocaleString('es-PE')}`} />
@@ -64,7 +62,7 @@ export default function ReportesPage() {
 
       <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] p-6">
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2"><BarChart3 className="w-5 h-5 text-[var(--color-primario)]" /><h2 className="text-lg font-semibold text-[var(--color-texto)]">Ventas mensuales</h2></div>
+            <div className="flex items-center gap-2"><BarChart3 className="w-5 h-5 text-[var(--color-primario)]" /><h2 className="text-lg font-semibold text-[var(--color-texto)]">Ventas por día</h2></div>
           <Button variant="secundario" tamaño="sm" onClick={() => handleExportar('ventas')}><Download className="w-3.5 h-3.5" /> CSV</Button>
         </div>
         <div className="h-80">

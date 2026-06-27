@@ -56,8 +56,10 @@ class VentaListResponse(BaseModel):
     id: int
     fecha_hora: datetime
     cliente_id: Optional[int] = None
+    cliente_nombre: Optional[str] = None
     estado: str
     monto_total: float
     metodo_pago: str
+    cantidad_productos: int = 0
 
     model_config = ConfigDict(from_attributes=True)

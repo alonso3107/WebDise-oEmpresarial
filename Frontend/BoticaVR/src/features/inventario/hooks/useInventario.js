@@ -90,7 +90,7 @@ export function useInventario() {
       await inventarioService.eliminar(producto.id);
       toast.success('Producto eliminado');
       await cargar();
-    } catch (err) {
+    } catch {
       toast.error('Error al eliminar el producto');
     }
   };

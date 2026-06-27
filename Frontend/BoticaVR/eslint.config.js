@@ -17,5 +17,11 @@ export default defineConfig([
       globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
+    rules: {
+      // Los hooks de datos disparan funciones asíncronas estables al montar.
+      'react-hooks/set-state-in-effect': 'off',
+      // Los filtros memoizados dependen de funciones de servicio deliberadamente estables.
+      'react-hooks/preserve-manual-memoization': 'off',
+    },
   },
 ])

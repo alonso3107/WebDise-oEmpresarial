@@ -3,7 +3,7 @@
 // Modal de crear/editar producto. Usa componentes UI reutilizables.
 // ============================================================
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Save } from 'lucide-react';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
@@ -12,24 +12,12 @@ import Modal from '../../../components/ui/Modal';
 export default function ProductoForm({ producto, onGuardar, onCancelar, isSaving }) {
   const esEdicion = !!producto;
 
-  const [nombre, setNombre] = useState('');
-  const [categoria, setCategoria] = useState('');
-  const [stock, setStock] = useState(0);
-  const [precioCompra, setPrecioCompra] = useState('');
-  const [precioVenta, setPrecioVenta] = useState('');
-  const [fechaVencimiento, setFechaVencimiento] = useState('');
+  const [nombre, setNombre] = useState(producto?.nombre || '');
+  const [categoria, setCategoria] = useState(producto?.categoria || '');
+  const [stock, setStock] = useState(producto?.stock ?? 0);
+  const [precioVenta, setPrecioVenta] = useState(producto?.precio_venta?.toString() || '');
+  const [fechaVencimiento, setFechaVencimiento] = useState(producto?.fecha_vencimiento?.slice(0, 10) || '');
   const [errorLocal, setErrorLocal] = useState('');
-
-  useEffect(() => {
-    if (producto) {
-      setNombre(producto.nombre || '');
-      setCategoria(producto.categoria || '');
-      setStock(producto.stock ?? 0);
-      setPrecioCompra(producto.precio_compra?.toString() || '');
-      setPrecioVenta(producto.precio_venta?.toString() || '');
-      setFechaVencimiento(producto.fecha_vencimiento?.slice(0, 10) || '');
-    }
-  }, [producto]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -42,7 +30,6 @@ export default function ProductoForm({ producto, onGuardar, onCancelar, isSaving
       nombre: nombre.trim(),
       categoria: categoria.trim(),
       stock: parseInt(stock) || 0,
-      precio_compra: parseFloat(precioCompra) || 0,
       precio_venta: parseFloat(precioVenta),
       fecha_vencimiento: fechaVencimiento || null,
     });
@@ -76,8 +63,6 @@ export default function ProductoForm({ producto, onGuardar, onCancelar, isSaving
           <Input label="Categoría *" value={categoria} onChange={(e) => setCategoria(e.target.value)} placeholder="Ej: Analgésico" disabled={isSaving} />
 
           <Input label="Stock" type="number" min="0" value={stock} onChange={(e) => setStock(e.target.value)} disabled={isSaving} />
-
-          <Input label="Precio compra (S/)" type="number" step="0.01" min="0" value={precioCompra} onChange={(e) => setPrecioCompra(e.target.value)} placeholder="0.00" disabled={isSaving} />
 
           <Input label="Precio venta (S/) *" type="number" step="0.01" min="0" value={precioVenta} onChange={(e) => setPrecioVenta(e.target.value)} placeholder="0.00" disabled={isSaving} />
 

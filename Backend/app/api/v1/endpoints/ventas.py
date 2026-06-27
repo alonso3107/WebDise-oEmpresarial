@@ -7,7 +7,7 @@ from typing import List, Optional
 from datetime import date, datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.deps import get_db
 from app.models.venta import Venta
@@ -213,13 +213,19 @@ def listar_ventas(
     estado: Optional[str] = Query(None, description="'completada' o 'anulada'"),
     metodo_pago: Optional[str] = Query(None, description="'efectivo', 'yape' o 'plin'"),
     fecha: Optional[str] = Query(None, description="Filtrar por fecha (YYYY-MM-DD)"),
+    cliente_id: Optional[int] = Query(None, description="Filtrar por cliente"),
 ):
     """Listar ventas con filtros opcionales."""
-    query = db.query(Venta)
+    query = db.query(Venta).options(
+        selectinload(Venta.cliente),
+        selectinload(Venta.detalles),
+    )
     if estado:
         query = query.filter(Venta.estado == estado)
     if metodo_pago:
         query = query.filter(Venta.metodo_pago == metodo_pago)
+    if cliente_id is not None:
+        query = query.filter(Venta.cliente_id == cliente_id)
     if fecha:
         try:
             fecha_dt = datetime.strptime(fecha, "%Y-%m-%d").date()
@@ -230,7 +236,23 @@ def listar_ventas(
         except ValueError:
             raise HTTPException(status_code=400, detail="Formato de fecha inválido. Use YYYY-MM-DD")
 
-    return query.order_by(Venta.fecha_hora.desc()).offset(skip).limit(limit).all()
+    ventas = query.order_by(Venta.fecha_hora.desc()).offset(skip).limit(limit).all()
+    return [
+        VentaListResponse(
+            id=venta.id,
+            fecha_hora=venta.fecha_hora,
+            cliente_id=venta.cliente_id,
+            cliente_nombre=(
+                f"{venta.cliente.nombres} {venta.cliente.apellidos}"
+                if venta.cliente else None
+            ),
+            estado=venta.estado,
+            monto_total=venta.monto_total,
+            metodo_pago=venta.metodo_pago,
+            cantidad_productos=sum(detalle.cantidad for detalle in venta.detalles),
+        )
+        for venta in ventas
+    ]
 
 
 @router.get("/{venta_id}", response_model=VentaResponse)

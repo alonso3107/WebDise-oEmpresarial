@@ -23,7 +23,7 @@ import apiClient from '../api/axiosConfig';
  * Uso:
  *   const { login, logout, isAuthenticated, usuario } = useAuthStore();
  */
-const useAuthStore = create((set, get) => ({
+const useAuthStore = create((set) => ({
   // ── Estado inicial ──
   token: localStorage.getItem('botica-token') || null,
   usuario: null,

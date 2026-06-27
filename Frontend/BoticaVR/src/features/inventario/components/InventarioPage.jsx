@@ -10,7 +10,6 @@ import { useInventario } from '../hooks/useInventario';
 import inventarioService from '../services/inventarioService';
 import ProductoForm from './ProductoForm';
 import Button from '../../../components/ui/Button';
-import Input from '../../../components/ui/Input';
 import Badge from '../../../components/ui/Badge';
 import { TableSkeleton } from '../../../components/ui/Skeleton';
 
@@ -59,7 +58,6 @@ export default function InventarioPage() {
         return <Badge variant={variant}>{stock} — {label}</Badge>;
       },
     },
-    { accessorKey: 'precio_compra', header: 'P. Compra', cell: ({ getValue }) => <span className="text-sm">S/ {parseFloat(getValue() || 0).toFixed(2)}</span> },
     { accessorKey: 'precio_venta', header: 'P. Venta', cell: ({ getValue }) => <span className="text-sm font-medium text-[var(--color-exito)]">S/ {parseFloat(getValue() || 0).toFixed(2)}</span> },
     {
       accessorKey: 'fecha_vencimiento', header: 'Vencimiento',

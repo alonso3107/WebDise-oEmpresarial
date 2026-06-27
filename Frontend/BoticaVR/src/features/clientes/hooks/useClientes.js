@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 export function useClientes() {
   const [clientes, setClientes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [busqueda, setBusqueda] = useState('');
 
   // Modal
@@ -22,10 +23,12 @@ export function useClientes() {
 
   const cargar = useCallback(async () => {
     setIsLoading(true);
+    setError(null);
     try {
       const data = await clientesService.listar();
       setClientes(data);
     } catch (err) {
+      setError('No se pudieron cargar los clientes');
       console.error('[useClientes]', err);
     } finally {
       setIsLoading(false);
@@ -62,7 +65,7 @@ export function useClientes() {
       cerrarModal();
       await cargar();
     } catch (err) {
-      toast.error('Error al guardar');
+      toast.error(err.response?.data?.detail || 'Error al guardar el cliente');
     } finally {
       setIsSaving(false);
     }
@@ -74,7 +77,7 @@ export function useClientes() {
       await clientesService.eliminar(cliente.id);
       toast.success('Cliente eliminado');
       await cargar();
-    } catch (err) {
+    } catch {
       toast.error('Error al eliminar');
     }
   };
@@ -91,6 +94,7 @@ export function useClientes() {
     clientes: clientesFiltrados,
     totalClientes: clientes.length,
     isLoading,
+    error,
     busqueda, setBusqueda,
     modalAbierto, abrirCrear, abrirEditar, cerrarModal,
     clienteEdicion, guardar, eliminar, isSaving,

@@ -1,12 +1,10 @@
 // ============================================================
 // BoticaVR — Ventas Service
-// Lógica de negocio: carrito, IGV, cálculo de totales.
-// ⚠️ El registro de venta es MOCK hasta que el backend lo implemente.
+// Lógica de negocio y adaptación de contratos para el POS.
 // ============================================================
 
 import { obtenerProductos } from '../../../api/inventarioApi';
-import { ventasEjemplo } from '../../../api/mocks/ventasMock';
-import toast from 'react-hot-toast';
+import apiClient from '../../../api/axiosConfig';
 
 const IGV = 0.18; // 18% IGV en Perú
 
@@ -23,15 +21,24 @@ const ventasService = {
     return Array.isArray(productos) ? productos : [];
   },
 
+  async buscarClientes() {
+    const { data } = await apiClient.get('/clientes/');
+    return data.map((cliente) => ({
+      id: cliente.id,
+      nombre: `${cliente.nombres} ${cliente.apellidos}`.trim(),
+      dni: cliente.dni,
+    }));
+  },
+
   /**
    * Calcula los totales del carrito.
    * @param {Array} items — Productos en el carrito con cantidad
    * @returns {{ subtotal: number, igv: number, total: number }}
    */
   calcularTotales(items) {
-    const subtotal = items.reduce((sum, item) => sum + item.precio_venta * item.cantidad, 0);
-    const igv = subtotal * IGV;
-    const total = subtotal + igv;
+    const total = items.reduce((sum, item) => sum + item.precio_venta * item.cantidad, 0);
+    const subtotal = total / (1 + IGV);
+    const igv = total - subtotal;
 
     return {
       subtotal: Math.round(subtotal * 100) / 100,
@@ -42,43 +49,34 @@ const ventasService = {
 
   /**
    * Registra una venta.
-   * ⚠️ MOCK — simula registro. Reemplazar con POST /api/v1/ventas/ cuando exista.
-   * 
-   * @param {object} venta — { items, metodo_pago, cliente }
-   * @returns {Promise<object>} Venta registrada (mock)
+   * @param {object} venta — { items, metodo_pago, cliente_id }
+   * @returns {Promise<object>} Venta registrada
    */
   async registrarVenta(venta) {
-    // Simular delay de red
-    await new Promise((resolve) => setTimeout(resolve, 800));
-
-    const { total } = this.calcularTotales(venta.items);
-
-    const nuevaVenta = {
-      id: Date.now(),
-      fecha: new Date().toISOString().slice(0, 10),
-      cliente: venta.cliente || 'Cliente general',
-      total,
-      productos: venta.items.reduce((sum, i) => sum + i.cantidad, 0),
+    const { data } = await apiClient.post('/ventas/', {
+      cliente_id: venta.cliente_id || null,
+      tipo_comprobante: 'boleta',
       metodo_pago: venta.metodo_pago,
-      items: venta.items,
-    };
-
-    // Guardar en localStorage para el historial (temporal)
-    const historial = JSON.parse(localStorage.getItem('botica-ventas') || '[]');
-    historial.unshift(nuevaVenta);
-    localStorage.setItem('botica-ventas', JSON.stringify(historial.slice(0, 50)));
-
-    return nuevaVenta;
+      items: venta.items.map((item) => ({ producto_id: item.id, cantidad: item.cantidad })),
+    });
+    return data;
   },
 
   /**
-   * Obtiene el historial de ventas (mock + localStorage).
-   * @returns {Array}
+   * Obtiene el historial persistido en el backend.
+   * @returns {Promise<Array>}
    */
-  obtenerHistorial() {
-    const local = JSON.parse(localStorage.getItem('botica-ventas') || '[]');
-    // Combinar con ventas de ejemplo
-    return [...local, ...ventasEjemplo];
+  async obtenerHistorial() {
+    const { data } = await apiClient.get('/ventas/', { params: { limit: 100 } });
+    return data.map((venta) => ({
+      id: venta.id,
+      fecha: venta.fecha_hora,
+      cliente: venta.cliente_nombre || 'Cliente general',
+      total: venta.monto_total,
+      productos: venta.cantidad_productos,
+      metodo_pago: venta.metodo_pago,
+      estado: venta.estado,
+    }));
   },
 
   /**

@@ -4,7 +4,7 @@
 // ============================================================
 
 import { useState } from 'react';
-import { Plus, Search, Pencil, Trash2, Users, History, X, Save, Phone, ShoppingBag, AlertTriangle, RefreshCw } from 'lucide-react';
+import { Plus, Search, Pencil, Trash2, Users, History, Save, Phone, ShoppingBag, AlertTriangle, RefreshCw } from 'lucide-react';
 import { useClientes } from '../hooks/useClientes';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
@@ -12,16 +12,17 @@ import Modal from '../../../components/ui/Modal';
 import { TableSkeleton } from '../../../components/ui/Skeleton';
 
 function ClienteForm({ cliente, onGuardar, onCancelar, isSaving }) {
-  const [nombre, setNombre] = useState(cliente?.nombre || '');
+  const [nombres, setNombres] = useState(cliente?.nombres || '');
+  const [apellidos, setApellidos] = useState(cliente?.apellidos || '');
   const [dni, setDni] = useState(cliente?.dni || '');
   const [telefono, setTelefono] = useState(cliente?.telefono || '');
   const [errorLocal, setErrorLocal] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!nombre.trim()) { setErrorLocal('El nombre es obligatorio'); return; }
-    if (!dni.trim() || dni.length < 8) { setErrorLocal('DNI inválido (mínimo 8 dígitos)'); return; }
-    onGuardar({ nombre: nombre.trim(), dni: dni.trim(), telefono: telefono.trim() });
+    if (!nombres.trim() || !apellidos.trim()) { setErrorLocal('Los nombres y apellidos son obligatorios'); return; }
+    if (!/^\d{8}$/.test(dni.trim())) { setErrorLocal('El DNI debe tener 8 dígitos'); return; }
+    onGuardar({ nombres: nombres.trim(), apellidos: apellidos.trim(), dni: dni.trim(), telefono: telefono.trim() || null });
   };
 
   return (
@@ -33,9 +34,10 @@ function ClienteForm({ cliente, onGuardar, onCancelar, isSaving }) {
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {errorLocal && <p className="text-sm text-[var(--color-alerta)] bg-red-50 border border-red-200 rounded-lg p-3">{errorLocal}</p>}
-        <Input label="Nombre completo *" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Ej: María López García" disabled={isSaving} autoFocus />
+        <Input label="Nombres *" value={nombres} onChange={(e) => setNombres(e.target.value)} placeholder="Ej: María" disabled={isSaving} autoFocus />
+        <Input label="Apellidos *" value={apellidos} onChange={(e) => setApellidos(e.target.value)} placeholder="Ej: López García" disabled={isSaving} />
         <div className="grid grid-cols-2 gap-4">
-          <Input label="DNI *" value={dni} onChange={(e) => setDni(e.target.value)} placeholder="12345678" maxLength={8} disabled={isSaving} />
+          <Input label="DNI *" value={dni} onChange={(e) => setDni(e.target.value.replace(/\D/g, ''))} placeholder="12345678" maxLength={8} disabled={isSaving || !!cliente} />
           <Input label="Teléfono" value={telefono} onChange={(e) => setTelefono(e.target.value)} placeholder="987654321" maxLength={9} disabled={isSaving} />
         </div>
       </form>

@@ -4,7 +4,7 @@
 // Los componentes/hooks consumen desde aquí, nunca directo a la API.
 // ============================================================
 
-import { loginRequest, logoutRequest } from '../../../api/authApi';
+import { logoutRequest } from '../../../api/authApi';
 import useAuthStore from '../../../context/authStore';
 
 /**
@@ -23,9 +23,8 @@ const authService = {
     const store = useAuthStore.getState();
 
     try {
-      const data = await loginRequest(username, password);
-      store.login(username, password); // actualiza token en el store
-      return { exito: true };
+      const exito = await store.login(username, password);
+      return { exito, error: exito ? undefined : useAuthStore.getState().error };
     } catch (error) {
       let mensaje = 'Error al iniciar sesión';
 

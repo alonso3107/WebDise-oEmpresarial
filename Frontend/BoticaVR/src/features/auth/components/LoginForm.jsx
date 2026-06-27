@@ -110,7 +110,7 @@ export default function LoginForm() {
               </button>
 
               <p className="text-center text-xs text-[var(--color-texto-sec)] font-light italic">
-                ⚠️ Modo desarrollo — el backend no está corriendo
+                ⚠️ Modo desarrollo — autenticación backend pendiente
               </p>
             </>
           )}

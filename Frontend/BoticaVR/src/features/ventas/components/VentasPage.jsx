@@ -7,7 +7,6 @@ import { useState } from 'react';
 import { Search, ShoppingCart, Plus, Minus, Trash2, CreditCard, Banknote, Receipt, History, Calendar, X, Package } from 'lucide-react';
 import { useVentas } from '../hooks/useVentas';
 import Button from '../../../components/ui/Button';
-import Input from '../../../components/ui/Input';
 import Badge from '../../../components/ui/Badge';
 
 export default function VentasPage() {
@@ -17,7 +16,7 @@ export default function VentasPage() {
     carrito, agregarAlCarrito, cambiarCantidad, quitarDelCarrito,
     totales,
     metodoPago, setMetodoPago,
-    cliente, setCliente,
+    cliente, setCliente, clientes,
     registrarVenta, isRegistrando,
     historial,
     filtroDesde, setFiltroDesde,
@@ -118,7 +117,13 @@ export default function VentasPage() {
             {carrito.length > 0 && (
               <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] p-5 space-y-4">
                 <h3 className="font-semibold text-[var(--color-texto)] text-sm">Datos de la venta</h3>
-                <Input label="Cliente (opcional)" value={cliente} onChange={(e) => setCliente(e.target.value)} placeholder="Nombre del cliente" />
+                <div>
+                  <label className="block text-xs font-medium text-[var(--color-texto-sec)] mb-2">Cliente (opcional)</label>
+                  <select value={cliente} onChange={(e) => setCliente(e.target.value)} className="w-full px-3 py-2.5 rounded-xl border border-[var(--color-borde)] bg-[var(--color-fondo)] text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)]">
+                    <option value="">Cliente general</option>
+                    {clientes.map((item) => <option key={item.id} value={item.id}>{item.nombre} — DNI {item.dni}</option>)}
+                  </select>
+                </div>
                 <div>
                   <label className="block text-xs font-medium text-[var(--color-texto-sec)] mb-2">Método de pago</label>
                   <div className="grid grid-cols-2 gap-2">
@@ -129,7 +134,6 @@ export default function VentasPage() {
                 <Button variant="exito" fullWidth onClick={registrarVenta} isLoading={isRegistrando}>
                   <Receipt className="w-5 h-5" /> Registrar venta — S/ {totales.total.toFixed(2)}
                 </Button>
-                <p className="text-xs text-[var(--color-texto-sec)] font-light italic text-center">⚠️ El registro es local (mock).</p>
               </div>
             )}
           </div>

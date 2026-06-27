@@ -81,12 +81,11 @@ const inventarioService = {
    * @param {Array} productos
    */
   exportarCSV(productos) {
-    const cabeceras = ['Nombre', 'Categoría', 'Stock', 'Precio Compra', 'Precio Venta', 'Vencimiento'];
+    const cabeceras = ['Nombre', 'Categoría', 'Stock', 'Precio Venta', 'Vencimiento'];
     const filas = productos.map((p) => [
       p.nombre,
       p.categoria,
       p.stock,
-      p.precio_compra,
       p.precio_venta,
       p.fecha_vencimiento || '',
     ]);

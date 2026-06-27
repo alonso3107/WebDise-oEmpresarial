@@ -14,6 +14,7 @@ export function useVentas() {
   // Productos del backend
   const [productos, setProductos] = useState([]);
   const [isLoadingProductos, setIsLoadingProductos] = useState(true);
+  const [clientes, setClientes] = useState([]);
 
   // Búsqueda
   const [busqueda, setBusqueda] = useState('');
@@ -35,8 +36,12 @@ export function useVentas() {
   const cargarProductos = useCallback(async () => {
     setIsLoadingProductos(true);
     try {
-      const data = await ventasService.buscarProductos();
-      setProductos(data);
+      const [productosData, clientesData] = await Promise.all([
+        ventasService.buscarProductos(),
+        ventasService.buscarClientes(),
+      ]);
+      setProductos(productosData);
+      setClientes(clientesData);
     } catch (err) {
       console.error('[useVentas] Error al cargar productos:', err);
     } finally {
@@ -47,9 +52,13 @@ export function useVentas() {
   useEffect(() => { cargarProductos(); }, [cargarProductos]);
 
   /** Carga el historial */
-  const cargarHistorial = useCallback(() => {
-    const data = ventasService.obtenerHistorial();
-    setHistorial(data);
+  const cargarHistorial = useCallback(async () => {
+    try {
+      setHistorial(await ventasService.obtenerHistorial());
+    } catch (err) {
+      console.error('[useVentas] Error al cargar historial:', err);
+      toast.error('No se pudo cargar el historial de ventas');
+    }
   }, []);
 
   useEffect(() => { cargarHistorial(); }, [cargarHistorial]);
@@ -108,19 +117,19 @@ export function useVentas() {
 
     setIsRegistrando(true);
     try {
-      await ventasService.registrarVenta({
+      const ventaRegistrada = await ventasService.registrarVenta({
         items: carrito,
         metodo_pago: metodoPago,
-        cliente: cliente.trim() || null,
+        cliente_id: cliente ? Number(cliente) : null,
       });
 
-      toast.success(`Venta registrada — Total: S/ ${totales.total.toFixed(2)}`);
+      toast.success(`Venta registrada — Total: S/ ${ventaRegistrada.monto_total.toFixed(2)}`);
       setCarrito([]);
       setCliente('');
-      cargarHistorial();
+      await Promise.all([cargarHistorial(), cargarProductos()]);
       return true;
     } catch (err) {
-      toast.error('Error al registrar la venta');
+      toast.error(err.response?.data?.detail || 'Error al registrar la venta');
       return false;
     } finally {
       setIsRegistrando(false);
@@ -147,6 +156,7 @@ export function useVentas() {
     // Checkout
     metodoPago, setMetodoPago,
     cliente, setCliente,
+    clientes,
     registrarVenta,
     isRegistrando,
     // Historial

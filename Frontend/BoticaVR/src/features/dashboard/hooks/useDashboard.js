@@ -18,7 +18,7 @@ export function useDashboard() {
   const [error, setError] = useState(null);
 
   /**
-   * Carga los datos del dashboard desde el backend + mocks.
+   * Carga los datos del dashboard desde el backend.
    */
   const cargarDatos = useCallback(async () => {
     setIsLoading(true);

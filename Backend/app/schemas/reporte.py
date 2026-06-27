@@ -30,3 +30,15 @@ class DashboardKPIs(BaseModel):
     alertas_vencimiento_pendientes: int
     alertas_stock_pendientes: int
     productos_mas_vendidos: List[ProductoMasVendido]
+
+
+class IngresoCategoria(BaseModel):
+    categoria: str
+    ingresos: float
+
+
+class ResumenReporte(BaseModel):
+    ingresos_totales: float
+    ventas_totales: int
+    ticket_promedio: float
+    producto_top: str

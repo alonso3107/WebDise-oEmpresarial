@@ -1,30 +1,46 @@
 // ============================================================
 // BoticaVR — Reportes Service
-// ⚠️ MOCK — usa datos simulados.
+// Consultas y adaptación de reportes persistidos en el backend.
 // ============================================================
 
-import {
-  ventasMensuales,
-  productosMasVendidos,
-  ingresosPorCategoria,
-  resumenPeriodo,
-} from '../../../api/mocks/reportesMock';
+import apiClient from '../../../api/axiosConfig';
+
+const construirParametros = (desde, hasta) => ({
+  ...(desde ? { desde } : {}),
+  ...(hasta ? { hasta } : {}),
+});
 
 const reportesService = {
-  obtenerVentasMensuales() {
-    return ventasMensuales;
+  async obtenerVentas(desde, hasta) {
+    const { data } = await apiClient.get('/reportes/ventas-diarias', {
+      params: { dias: 30, ...construirParametros(desde, hasta) },
+    });
+    return data.reverse().map((item) => ({ mes: item.fecha, ingresos: item.total_ventas }));
   },
 
-  obtenerProductosMasVendidos() {
-    return productosMasVendidos;
+  async obtenerProductosMasVendidos(desde, hasta) {
+    const { data } = await apiClient.get('/reportes/productos-mas-vendidos', {
+      params: construirParametros(desde, hasta),
+    });
+    return data.map((item) => ({
+      nombre: item.nombre,
+      cantidad: item.cantidad_vendida,
+      ingresos: item.total_recaudado,
+    }));
   },
 
-  obtenerIngresosPorCategoria() {
-    return ingresosPorCategoria;
+  async obtenerIngresosPorCategoria(desde, hasta) {
+    const { data } = await apiClient.get('/reportes/ingresos-por-categoria', {
+      params: construirParametros(desde, hasta),
+    });
+    return data;
   },
 
-  obtenerResumen() {
-    return resumenPeriodo;
+  async obtenerResumen(desde, hasta) {
+    const { data } = await apiClient.get('/reportes/resumen', {
+      params: construirParametros(desde, hasta),
+    });
+    return data;
   },
 
   /** Exporta los datos a CSV */
@@ -48,7 +64,7 @@ const reportesService = {
   },
 
   /** Exporta a PDF (simplificado: abre ventana de impresión) */
-  exportarPDF(elementoId) {
+  exportarPDF() {
     window.print();
   },
 };
