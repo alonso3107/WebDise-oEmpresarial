@@ -63,3 +63,27 @@ source venv/bin/activate
 python -m uvicorn app.main:app --reload --port 8000
 ```
 La documentación interactiva (Swagger) con los nuevos endpoints está en: `http://localhost:8000/docs`
+
+## 6. Notas de Integración para el Frontend (React)
+
+Para el equipo de Frontend encargado de consumir la API del POS, por favor tener en cuenta los siguientes comportamientos introducidos en el Sprint 3:
+
+### 🚫 Bloqueo de Productos Vencidos
+El endpoint `POST /api/v1/ventas/` arrojará un error estricto (`HTTP 400 Bad Request`) si se intenta vender un producto cuya `fecha_vencimiento` haya pasado. El mensaje vendrá en la propiedad `detail`. 
+**Sugerencia Frontend:** Capturar este error `400` y mostrar un Modal o Toast (ej. `react-toastify` o `sonner`) al cajero indicando el bloqueo.
+
+### ⚠️ Alertas de Stock en Tiempo Real
+Cuando una venta reduce el inventario de un producto por debajo o igual a su `stock_minimo`, el endpoint responderá con éxito (`201 Created`), pero **incluirá un nuevo campo `alertas` (array de strings) en el payload de respuesta JSON**.
+**Sugerencia Frontend:** Leer el campo `alertas` en la respuesta de la venta. Si existe y contiene datos, iterar sobre el array y renderizar alertas visuales tipo "Warning" para notificar inmediatamente la necesidad de reposición.
+
+Ejemplo de respuesta con alerta:
+```json
+{
+  "id": 123,
+  "monto_total": 45.5,
+  "alertas": [
+    "¡Atención! El stock de 'Paracetamol' cayó a 4 (Mínimo requerido: 5)."
+  ],
+  "detalles": [...]
+}
+```

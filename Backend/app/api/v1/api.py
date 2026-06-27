@@ -40,3 +40,11 @@ router.include_router(servicios.router, prefix="/servicios", tags=["Pagos de Ser
 # ── Sprint 3: Alertas ──
 from app.api.v1.endpoints import alertas
 router.include_router(alertas.router, prefix="/alertas", tags=["Alertas"])
+
+# ── Sprint 3: Caja ──
+from app.api.v1.endpoints import caja
+router.include_router(caja.router, prefix="/caja", tags=["Caja Registradora"])
+
+# ── Sprint 3: Reportes y KPIs ──
+from app.api.v1.endpoints import reportes
+router.include_router(reportes.router, prefix="/reportes", tags=["Reportes y Dashboard"])

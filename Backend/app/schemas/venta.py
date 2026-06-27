@@ -30,7 +30,7 @@ class VentaCreate(BaseModel):
     """Payload para registrar una venta desde el POS."""
     cliente_id: Optional[int] = None
     tipo_comprobante: str = Field("boleta", description="'boleta' o 'ticket'")
-    metodo_pago: str = Field("efectivo", description="'efectivo', 'yape', 'plin', 'tarjeta'")
+    metodo_pago: str = Field("efectivo", description="'efectivo', 'yape' o 'plin'")
     items: List[DetalleVentaItem] = Field(..., min_length=1, description="Al menos 1 producto")
 
 
@@ -45,6 +45,7 @@ class VentaResponse(BaseModel):
     descuento: float
     monto_total: float
     metodo_pago: str
+    alertas: Optional[List[str]] = None
     detalles: List[DetalleVentaResponse] = []
 
     model_config = ConfigDict(from_attributes=True)
