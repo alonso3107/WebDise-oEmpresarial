@@ -1,0 +1,2 @@
+"""Repositorios concretos de persistencia."""
+

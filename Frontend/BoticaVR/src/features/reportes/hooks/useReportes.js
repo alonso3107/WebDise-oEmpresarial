@@ -38,7 +38,7 @@ export function useReportes() {
 
   useEffect(() => { cargar(); }, [cargar]);
 
-  const exportarCSV = (tipo) => {
+  const exportarExcel = (tipo) => {
     let datos, nombre;
 
     switch (tipo) {
@@ -58,7 +58,7 @@ export function useReportes() {
         return;
     }
 
-    reportesService.exportarCSV(datos, nombre);
+    reportesService.exportarExcel(datos, nombre);
   };
 
   return {
@@ -69,6 +69,6 @@ export function useReportes() {
     filtroDesde, setFiltroDesde,
     filtroHasta, setFiltroHasta,
     isLoading, error, recargar: cargar,
-    exportarCSV,
+    exportarExcel,
   };
 }

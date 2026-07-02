@@ -176,7 +176,21 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {criticos && criticos.length === 0 && (
+      {resumen?.stock_bajo > 0 && criticos?.length === 0 && (
+        <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] p-5 border-l-4 border-amber-500 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-2.5">
+            <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0" />
+            <p className="text-sm text-[var(--color-texto)]">
+              Tienes <span className="font-semibold text-amber-600">{resumen.stock_bajo} producto{resumen.stock_bajo !== 1 ? 's' : ''}</span> con stock bajo en tu inventario.
+            </p>
+          </div>
+          <button onClick={() => navigate('/inventario')} className="text-sm text-[var(--color-primario)] hover:text-[var(--color-primario-hover)] font-medium transition-colors duration-300 flex items-center gap-0.5 shrink-0 self-start sm:self-center">
+            Ver inventario <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {resumen && resumen.stock_bajo === 0 && (
         <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] p-6 border-l-4 border-[var(--color-exito)]">
           <div className="flex items-center gap-2">
             <Package className="w-5 h-5 text-[var(--color-exito)]" />

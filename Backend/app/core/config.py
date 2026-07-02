@@ -3,10 +3,15 @@ Configuración central de la aplicación Botica V&R.
 Todas las variables de entorno y constantes del proyecto se definen aquí.
 """
 
+from pathlib import Path
 from typing import List
 
 # pyrefly: ignore [missing-import]
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+BACKEND_DIR = Path(__file__).resolve().parents[2]
+DEFAULT_DATABASE_URL = f"sqlite:///{(BACKEND_DIR / 'BoticaVR.db').as_posix()}"
 
 
 class Settings(BaseSettings):
@@ -16,7 +21,8 @@ class Settings(BaseSettings):
     API_V1_PREFIX: str = "/api/v1"
 
     # ── Base de datos (SQLite) ──
-    DATABASE_URL: str = "sqlite:///./BoticaVR.db"
+    DATABASE_URL: str = DEFAULT_DATABASE_URL
+    CARGAR_DATOS_INICIALES: bool = True
 
     # ── Seguridad / JWT ──
     SECRET_KEY: str = "botica-vr-secret-key-cambiar-en-produccion-2026"
@@ -36,7 +42,7 @@ class Settings(BaseSettings):
 
     # Configuración de pydantic-settings v2 (reemplaza class Config deprecado)
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=BACKEND_DIR / ".env",
         case_sensitive=True,
     )
 

@@ -1,0 +1,70 @@
+# ============================================================
+# Botica V&R — Composición de servicios (Desarrollo)
+#
+# Uso con Podman:
+#   podman compose up -d          # Levantar en segundo plano
+#   podman compose up             # Levantar con logs visibles
+#   podman compose down           # Detener y limpiar
+#   podman compose logs -f        # Seguir logs
+#
+# Uso con Docker (alternativo):
+#   docker compose up -d
+# ============================================================
+
+name: botica-vr
+
+services:
+  # ────────────────────────────────────────────────────────
+  # Backend — FastAPI + SQLite
+  # ────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./Backend
+    container_name: botica-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Montar código fuente para hot-reload
+      - ./Backend:/app
+    environment:
+      # Guardar la base de datos directamente en el host (Backend/) para sincronización con lazysql
+      - DATABASE_URL=sqlite:////app/BoticaVR.db
+      - CARGAR_DATOS_INICIALES=true
+      # CORS origins (desde el navegador del host)
+      - CORS_ORIGINS=["http://localhost:5173","http://127.0.0.1:5173"]
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  # ────────────────────────────────────────────────────────
+  # Frontend — Vite Dev Server con hot-reload
+  # ────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./Frontend/BoticaVR
+      dockerfile: Dockerfile.dev
+    container_name: botica-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      # Montar código fuente para hot-reload
+      - ./Frontend/BoticaVR:/app
+      # Volumen anónimo para preservar node_modules del contenedor
+      - /app/node_modules
+    environment:
+      # URL del backend (alcanzable por nombre de servicio dentro de la red)
+      - VITE_BACKEND_URL=http://backend:8000
+    depends_on:
+      backend:
+        condition: service_healthy
+    command: pnpm run dev --host 0.0.0.0
+    restart: unless-stopped
+
+# volumes:
+#   botica-db:
+#     name: botica-vr-db

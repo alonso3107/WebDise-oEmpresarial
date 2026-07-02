@@ -81,7 +81,7 @@ export default function Sidebar() {
       {/* ── Footer ── */}
       <div className="px-6 py-4 border-t border-white/10">
         <p className="text-xs text-[var(--color-fondo)]/50 font-light italic text-center">
-          v1.0 — Uso local
+          v2.0 — Uso local
         </p>
       </div>
     </aside>

@@ -98,6 +98,15 @@ class IntegracionApiTest(unittest.TestCase):
         self.assertEqual(categorias.json()[0]["categoria"], "Analgésicos")
         self.assertEqual(categorias.json()[0]["ingresos"], 11.0)
 
+        anulada = self.client.put(f"/api/v1/ventas/{venta.json()['id']}/anular")
+        self.assertEqual(anulada.status_code, 200, anulada.text)
+        self.assertEqual(anulada.json()["estado"], "anulada")
+
+        producto_actualizado = self.client.get(
+            f"/api/v1/productos/{producto.json()['id']}"
+        )
+        self.assertEqual(producto_actualizado.json()["stock"], 10)
+
 
 if __name__ == "__main__":
     unittest.main()

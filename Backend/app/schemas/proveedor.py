@@ -6,9 +6,9 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class ProveedorBase(BaseModel):
-    ruc: str = Field(..., min_length=11, max_length=11, description="RUC de 11 dígitos")
-    razon_social: str
-    telefono: Optional[str] = None
+    ruc: str = Field(..., pattern=r"^\d{11}$", description="RUC de exactamente 11 dígitos numéricos")
+    razon_social: str = Field(..., min_length=1)
+    telefono: Optional[str] = Field(None, pattern=r"^\+?[0-9\-\s]{7,15}$", description="Teléfono del proveedor")
     email: Optional[str] = None
     direccion: Optional[str] = None
 
@@ -18,8 +18,8 @@ class ProveedorCreate(ProveedorBase):
 
 
 class ProveedorUpdate(BaseModel):
-    razon_social: Optional[str] = None
-    telefono: Optional[str] = None
+    razon_social: Optional[str] = Field(None, min_length=1)
+    telefono: Optional[str] = Field(None, pattern=r"^\+?[0-9\-\s]{7,15}$")
     email: Optional[str] = None
     direccion: Optional[str] = None
 

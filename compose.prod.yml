@@ -1,0 +1,61 @@
+# ============================================================
+# Botica V&R — Composición de servicios (Producción / Empaquetable)
+#
+# Esta versión construye imágenes optimizadas listas para distribuir.
+# El frontend se sirve con nginx y el backend corre sin hot-reload.
+#
+# Construir imágenes:
+#   podman compose -f compose.prod.yml build
+#
+# Ejecutar:
+#   podman compose -f compose.prod.yml up -d
+#
+# Empaquetar como archivo portable:
+#   podman save -o botica-vr-backend.tar botica-vr-backend:latest
+#   podman save -o botica-vr-frontend.tar botica-vr-frontend:latest
+#
+# Cargar en otra máquina:
+#   podman load -i botica-vr-backend.tar
+#   podman load -i botica-vr-frontend.tar
+# ============================================================
+
+name: botica-vr-prod
+
+services:
+  # ────────────────────────────────────────────────────────
+  # Backend — FastAPI + SQLite (producción)
+  # ────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./Backend
+    image: botica-vr-backend:latest
+    container_name: botica-backend-prod
+    ports:
+      - "8000:8000"
+    volumes:
+      # Base de datos persistente en el host
+      - botica-db-prod:/app/db
+    environment:
+      - DATABASE_URL=sqlite:////app/db/BoticaVR.db
+      - CARGAR_DATOS_INICIALES=true
+      - CORS_ORIGINS=["http://localhost","http://127.0.0.1"]
+    restart: unless-stopped
+
+  # ────────────────────────────────────────────────────────
+  # Frontend — Vite build servido con nginx
+  # ────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./Frontend/BoticaVR
+      dockerfile: Dockerfile
+    image: botica-vr-frontend:latest
+    container_name: botica-frontend-prod
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  botica-db-prod:
+    name: botica-vr-db-prod

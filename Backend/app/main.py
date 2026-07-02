@@ -9,19 +9,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
-from app.core.database import engine, Base
 from app.api.v1.api import router as api_v1_router
-
-# ── Importar TODOS los modelos para que SQLAlchemy los registre ──
-from app.models.categoria import Categoria
-from app.models.proveedor import Proveedor
-from app.models.producto import Producto
-from app.models.cliente import Cliente
-from app.models.promocion import Promocion
-from app.models.venta import Venta
-from app.models.detalle_venta import DetalleVenta
-from app.models.pago_servicio import PagoServicio
-from app.models.movimiento_caja import MovimientoCaja
+from app.infrastructure.database.bootstrap import inicializar_base_datos
 
 
 @asynccontextmanager
@@ -31,8 +20,7 @@ async def lifespan(app: FastAPI):
     - startup: Crea las tablas en SQLite si no existen.
     - shutdown: Lugar para limpiar recursos si es necesario.
     """
-    # ── Startup: crear tablas ──
-    Base.metadata.create_all(bind=engine)
+    inicializar_base_datos(settings.CARGAR_DATOS_INICIALES)
     yield
     # ── Shutdown: limpiar recursos si es necesario ──
 

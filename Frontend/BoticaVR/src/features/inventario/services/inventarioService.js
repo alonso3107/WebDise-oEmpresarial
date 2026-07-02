@@ -10,6 +10,8 @@ import {
   eliminarProducto,
 } from '../../../api/inventarioApi';
 
+import * as XLSX from 'xlsx';
+
 /**
  * Servicio de inventario.
  * Encapsula CRUD y operaciones sobre productos.
@@ -77,30 +79,40 @@ const inventarioService = {
   },
 
   /**
-   * Exporta los productos a CSV.
+   * Exporta los productos a Excel (.xlsx) con autoajuste de columnas y cabeceras pulidas.
    * @param {Array} productos
    */
-  exportarCSV(productos) {
-    const cabeceras = ['Nombre', 'Categoría', 'Stock', 'Precio Venta', 'Vencimiento'];
-    const filas = productos.map((p) => [
-      p.nombre,
-      p.categoria,
-      p.stock,
-      p.precio_venta,
-      p.fecha_vencimiento || '',
-    ]);
+  exportarExcel(productos) {
+    if (!productos?.length) return;
 
-    const csv = [cabeceras, ...filas]
-      .map((fila) => fila.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(','))
-      .join('\n');
+    // Mapear datos con nombres de cabeceras profesionales y legibles
+    const datosMapeados = productos.map((p) => ({
+      'ID': p.id,
+      'Nombre de Producto': p.nombre,
+      'Categoría': p.categoria,
+      'Stock Actual': p.stock,
+      'Precio Venta (S/)': p.precio_venta,
+      'Fecha de Vencimiento': p.fecha_vencimiento ? new Date(p.fecha_vencimiento).toLocaleDateString('es-PE') : '—'
+    }));
 
-    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `inventario-boticavr-${new Date().toISOString().slice(0, 10)}.csv`;
-    link.click();
-    URL.revokeObjectURL(url);
+    // Crear la hoja de trabajo y el libro de cálculo
+    const worksheet = XLSX.utils.json_to_sheet(datosMapeados);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Inventario');
+
+    // Calcular y asignar anchos de columnas automáticamente
+    const maxAnchos = Object.keys(datosMapeados[0]).map((key) => {
+      // Tomar la longitud de la cabecera o de los datos de la columna
+      const maxLen = datosMapeados.reduce((max, fila) => {
+        const valLen = String(fila[key] ?? '').length;
+        return valLen > max ? valLen : max;
+      }, key.length);
+      return { wch: Math.max(maxLen + 4, 10) };
+    });
+    worksheet['!cols'] = maxAnchos;
+
+    // Generar archivo de descarga
+    XLSX.writeFile(workbook, `inventario-boticavr-${new Date().toISOString().slice(0, 10)}.xlsx`);
   },
 };
 

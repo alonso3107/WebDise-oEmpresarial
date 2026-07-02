@@ -48,3 +48,8 @@ router.include_router(caja.router, prefix="/caja", tags=["Caja Registradora"])
 # ── Sprint 3: Reportes y KPIs ──
 from app.api.v1.endpoints import reportes
 router.include_router(reportes.router, prefix="/reportes", tags=["Reportes y Dashboard"])
+
+# ── Autenticación de Desarrollo ──
+from app.api.v1.endpoints import auth
+router.include_router(auth.router, prefix="/auth", tags=["Autenticación"])
+

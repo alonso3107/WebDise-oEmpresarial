@@ -20,9 +20,17 @@ function ClienteForm({ cliente, onGuardar, onCancelar, isSaving }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setErrorLocal('');
     if (!nombres.trim() || !apellidos.trim()) { setErrorLocal('Los nombres y apellidos son obligatorios'); return; }
-    if (!/^\d{8}$/.test(dni.trim())) { setErrorLocal('El DNI debe tener 8 dígitos'); return; }
-    onGuardar({ nombres: nombres.trim(), apellidos: apellidos.trim(), dni: dni.trim(), telefono: telefono.trim() || null });
+    if (!/^\d{8}$/.test(dni.trim())) { setErrorLocal('El DNI debe tener exactamente 8 dígitos numéricos'); return; }
+    
+    const telefonoLimpio = telefono.trim();
+    if (telefonoLimpio && !/^9\d{8}$/.test(telefonoLimpio)) {
+      setErrorLocal('El teléfono celular en Perú debe empezar con 9 y tener exactamente 9 dígitos');
+      return;
+    }
+    
+    onGuardar({ nombres: nombres.trim(), apellidos: apellidos.trim(), dni: dni.trim(), telefono: telefonoLimpio || null });
   };
 
   return (
@@ -38,7 +46,7 @@ function ClienteForm({ cliente, onGuardar, onCancelar, isSaving }) {
         <Input label="Apellidos *" value={apellidos} onChange={(e) => setApellidos(e.target.value)} placeholder="Ej: López García" disabled={isSaving} />
         <div className="grid grid-cols-2 gap-4">
           <Input label="DNI *" value={dni} onChange={(e) => setDni(e.target.value.replace(/\D/g, ''))} placeholder="12345678" maxLength={8} disabled={isSaving || !!cliente} />
-          <Input label="Teléfono" value={telefono} onChange={(e) => setTelefono(e.target.value)} placeholder="987654321" maxLength={9} disabled={isSaving} />
+          <Input label="Teléfono" value={telefono} onChange={(e) => setTelefono(e.target.value.replace(/\D/g, ''))} placeholder="987654321" maxLength={9} disabled={isSaving} />
         </div>
       </form>
     </Modal>

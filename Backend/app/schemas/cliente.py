@@ -7,20 +7,23 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class ClienteBase(BaseModel):
-    dni: str = Field(..., min_length=8, max_length=8, description="DNI de 8 dígitos")
+    dni: str
     nombres: str
     apellidos: str
     telefono: Optional[str] = None
 
 
 class ClienteCreate(ClienteBase):
-    pass
+    dni: str = Field(..., pattern=r"^\d{8}$", description="DNI de exactamente 8 dígitos numéricos")
+    nombres: str = Field(..., min_length=1)
+    apellidos: str = Field(..., min_length=1)
+    telefono: Optional[str] = Field(None, pattern=r"^9\d{8}$", description="Teléfono móvil peruano de exactamente 9 dígitos que empieza con 9")
 
 
 class ClienteUpdate(BaseModel):
-    nombres: Optional[str] = None
-    apellidos: Optional[str] = None
-    telefono: Optional[str] = None
+    nombres: Optional[str] = Field(None, min_length=1)
+    apellidos: Optional[str] = Field(None, min_length=1)
+    telefono: Optional[str] = Field(None, pattern=r"^9\d{8}$", description="Teléfono móvil peruano de 9 dígitos")
 
 
 class ClienteResponse(ClienteBase):

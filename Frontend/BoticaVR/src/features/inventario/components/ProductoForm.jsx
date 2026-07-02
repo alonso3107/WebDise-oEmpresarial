@@ -8,6 +8,7 @@ import { Save } from 'lucide-react';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Modal from '../../../components/ui/Modal';
+import { DatePicker } from '../../../components/ui/date-picker';
 
 export default function ProductoForm({ producto, onGuardar, onCancelar, isSaving }) {
   const esEdicion = !!producto;
@@ -24,13 +25,18 @@ export default function ProductoForm({ producto, onGuardar, onCancelar, isSaving
     setErrorLocal('');
     if (!nombre.trim()) { setErrorLocal('El nombre es obligatorio'); return; }
     if (!categoria.trim()) { setErrorLocal('La categoría es obligatoria'); return; }
-    if (!precioVenta || parseFloat(precioVenta) <= 0) { setErrorLocal('El precio de venta debe ser mayor a 0'); return; }
+    
+    const stockInt = parseInt(stock);
+    if (isNaN(stockInt) || stockInt < 0) { setErrorLocal('El stock no puede ser negativo'); return; }
+    
+    const precioFloat = parseFloat(precioVenta);
+    if (isNaN(precioFloat) || precioFloat <= 0) { setErrorLocal('El precio de venta debe ser mayor a 0'); return; }
 
     onGuardar({
       nombre: nombre.trim(),
       categoria: categoria.trim(),
-      stock: parseInt(stock) || 0,
-      precio_venta: parseFloat(precioVenta),
+      stock: stockInt,
+      precio_venta: precioFloat,
       fecha_vencimiento: fechaVencimiento || null,
     });
   };
@@ -67,7 +73,8 @@ export default function ProductoForm({ producto, onGuardar, onCancelar, isSaving
           <Input label="Precio venta (S/) *" type="number" step="0.01" min="0" value={precioVenta} onChange={(e) => setPrecioVenta(e.target.value)} placeholder="0.00" disabled={isSaving} />
 
           <div className="sm:col-span-2">
-            <Input label="Fecha de vencimiento" type="date" value={fechaVencimiento} onChange={(e) => setFechaVencimiento(e.target.value)} disabled={isSaving} />
+            <label className="block text-xs font-semibold text-[var(--color-texto-sec)] mb-1.5">Fecha de vencimiento</label>
+            <DatePicker value={fechaVencimiento} onChange={setFechaVencimiento} disabled={isSaving} placeholder="Seleccionar fecha de vencimiento" />
           </div>
         </div>
       </form>
