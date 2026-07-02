@@ -14,3 +14,7 @@
 *.db
 *.sqlite3
 .vscode/
+
+# Imágenes empaquetadas de Podman/Docker
+*.tar
+*.tar.gz
