@@ -3,19 +3,22 @@ from typing import Optional
 from datetime import date
 
 class ProductoBase(BaseModel):
-    nombre: str = Field(..., min_length=1)
+    nombre: str
     descripcion: Optional[str] = None
-    precio: float = Field(..., gt=0)
-    stock: int = Field(0, ge=0)
+    precio: float
+    stock: int = 0
     codigo_barras: Optional[str] = None
     activo: bool = True
     fecha_vencimiento: Optional[date] = None
-    stock_minimo: int = Field(5, ge=0)
+    stock_minimo: int = 5
     categoria_id: Optional[int] = None
     proveedor_id: Optional[int] = None
 
 class ProductoCreate(ProductoBase):
-    pass
+    nombre: str = Field(..., min_length=1)
+    precio: float = Field(..., gt=0)
+    stock: int = Field(0, ge=0)
+    stock_minimo: int = Field(5, ge=0)
 
 class ProductoUpdate(BaseModel):
     nombre: Optional[str] = Field(None, min_length=1)
