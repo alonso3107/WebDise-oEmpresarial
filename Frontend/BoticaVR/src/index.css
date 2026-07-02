@@ -236,4 +236,19 @@ small, .hint, .text-hint {
   html {
     @apply font-sans;
   }
+
+  /* ── Estilos globales para cabeceras de tablas (Legibilidad & UI/UX) ── */
+  table thead tr {
+    background-color: rgba(92, 109, 124, 0.06) !important;
+    border-bottom: 2px solid rgba(92, 109, 124, 0.25) !important;
+  }
+  table thead th {
+    font-weight: 700 !important; /* Frick Condensed bold */
+    color: var(--color-texto) !important; /* Mayor contraste de lectura */
+    font-size: 11px !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+  }
 }
