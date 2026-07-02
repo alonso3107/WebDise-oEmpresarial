@@ -53,7 +53,7 @@ jobs:
       - name: Configurar entorno de Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Instalar PNPM (v11)
         uses: pnpm/action-setup@v4
