@@ -4,6 +4,7 @@
 // ============================================================
 
 import apiClient from '../../../api/axiosConfig';
+import * as XLSX from 'xlsx';
 
 const construirParametros = (desde, hasta) => ({
   ...(desde ? { desde } : {}),
@@ -43,24 +44,50 @@ const reportesService = {
     return data;
   },
 
-  /** Exporta los datos a CSV */
-  exportarCSV(datos, nombreArchivo) {
+  /** Exporta los datos a Excel (.xlsx) con anchos de columna autoajustados y cabeceras amigables */
+  exportarExcel(datos, nombreArchivo) {
     if (!datos?.length) return;
 
-    const cabeceras = Object.keys(datos[0]);
-    const filas = datos.map((d) => cabeceras.map((k) => d[k]));
+    // Diccionario de traducción de claves técnicas a cabeceras en español con formato limpio
+    const traducciones = {
+      // Reporte de Ventas
+      mes: 'Fecha / Período',
+      ingresos: 'Ingresos (S/)',
+      // Reporte de Productos
+      nombre: 'Nombre del Producto',
+      cantidad: 'Cantidad Vendida',
+      // Reporte de Categorías
+      categoria: 'Categoría',
+      porcentaje: 'Porcentaje (%)',
+    };
 
-    const csv = [cabeceras, ...filas]
-      .map((fila) => fila.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(','))
-      .join('\n');
+    // Formatear los datos mapeando claves amigables
+    const datosMapeados = datos.map((fila) => {
+      const filaFormateada = {};
+      Object.keys(fila).forEach((key) => {
+        const cabeceraAmigable = traducciones[key] || key;
+        filaFormateada[cabeceraAmigable] = fila[key];
+      });
+      return filaFormateada;
+    });
 
-    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${nombreArchivo}-${new Date().toISOString().slice(0, 10)}.csv`;
-    link.click();
-    URL.revokeObjectURL(url);
+    // Crear libro y hoja
+    const worksheet = XLSX.utils.json_to_sheet(datosMapeados);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Reporte');
+
+    // Calcular y asignar anchos de columnas de forma inteligente
+    const maxAnchos = Object.keys(datosMapeados[0]).map((key) => {
+      const maxLen = datosMapeados.reduce((max, fila) => {
+        const valLen = String(fila[key] ?? '').length;
+        return valLen > max ? valLen : max;
+      }, key.length);
+      return { wch: Math.max(maxLen + 4, 15) };
+    });
+    worksheet['!cols'] = maxAnchos;
+
+    // Descargar archivo Excel
+    XLSX.writeFile(workbook, `${nombreArchivo}-${new Date().toISOString().slice(0, 10)}.xlsx`);
   },
 
   /** Exporta a PDF (simplificado: abre ventana de impresión) */

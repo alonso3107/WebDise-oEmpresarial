@@ -95,10 +95,10 @@ export function useInventario() {
     }
   };
 
-  /** Exporta a CSV */
-  const exportarCSV = () => {
-    inventarioService.exportarCSV(productosFiltrados);
-    toast.success('CSV descargado');
+  /** Exporta a Excel */
+  const exportarExcel = () => {
+    inventarioService.exportarExcel(productosFiltrados);
+    toast.success('Excel descargado');
   };
 
   /** Productos filtrados según criterios activos */
@@ -162,6 +162,6 @@ export function useInventario() {
     guardar, eliminar, isSaving,
     // Utilidades
     recargar: cargar,
-    exportarCSV,
+    exportarExcel,
   };
 }

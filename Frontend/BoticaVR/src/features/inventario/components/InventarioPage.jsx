@@ -43,7 +43,7 @@ export default function InventarioPage() {
     modalAbierto, abrirCrear, abrirEditar, cerrarModal,
     productoEdicion,
     guardar, eliminar, isSaving,
-    recargar, exportarCSV,
+    recargar, exportarExcel,
   } = useInventario();
 
   const columns = useMemo(() => [
@@ -113,7 +113,7 @@ export default function InventarioPage() {
           <p className="text-sm text-[var(--color-texto-sec)] font-light italic mt-1">{totalProductos} producto{totalProductos !== 1 ? 's' : ''} en total{productos.length !== totalProductos && ` — ${productos.length} mostrados`}</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="secundario" tamaño="sm" onClick={exportarCSV} disabled={productos.length === 0}><Download className="w-4 h-4" /> CSV</Button>
+          <Button variant="secundario" tamaño="sm" onClick={exportarExcel} disabled={productos.length === 0}><Download className="w-4 h-4" /> Excel</Button>
           <Button tamaño="sm" onClick={abrirCrear}><Plus className="w-4 h-4" /> Nuevo producto</Button>
         </div>
       </div>

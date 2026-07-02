@@ -10,7 +10,7 @@ import Button from '../../../components/ui/Button';
 import toast from 'react-hot-toast';
 import { DatePicker } from '../../../components/ui/date-picker';
 
-const COLORES = ['#5C6D7C', '#4A5A68', '#7B8FA1', '#96A8B5', '#B0BEC5', '#C8D4DB', '#DCE4E8'];
+const COLORES = ['#2E5A44', '#B85A3A', '#2F3E46', '#D49D42', '#3D6B8C', '#7B5E7B', '#83C5BE'];
 
 function TooltipPersonalizado({ active, payload, label }) {
   if (!active || !payload?.length) return null;
@@ -32,9 +32,9 @@ function StatCard({ icon: Icon, label, value, suffix = '' }) {
 }
 
 export default function ReportesPage() {
-  const { ventasMensuales, productosTop, ingresosCat, resumen, filtroDesde, setFiltroDesde, filtroHasta, setFiltroHasta, exportarCSV, isLoading, error } = useReportes();
+  const { ventasMensuales, productosTop, ingresosCat, resumen, filtroDesde, setFiltroDesde, filtroHasta, setFiltroHasta, exportarExcel, isLoading, error } = useReportes();
 
-  const handleExportar = (tipo) => { exportarCSV(tipo); toast.success(`Reporte de ${tipo} descargado`); };
+  const handleExportar = (tipo) => { exportarExcel(tipo); toast.success(`Reporte de ${tipo} descargado`); };
 
   return (
     <div className="space-y-6">
@@ -63,7 +63,7 @@ export default function ReportesPage() {
       <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] p-6">
         <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2"><BarChart3 className="w-5 h-5 text-[var(--color-primario)]" /><h2 className="text-lg font-semibold text-[var(--color-texto)]">Ventas por día</h2></div>
-          <Button variant="secundario" tamaño="sm" onClick={() => handleExportar('ventas')}><Download className="w-3.5 h-3.5" /> CSV</Button>
+          <Button variant="secundario" tamaño="sm" onClick={() => handleExportar('ventas')}><Download className="w-3.5 h-3.5" /> Excel</Button>
         </div>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
@@ -82,7 +82,7 @@ export default function ReportesPage() {
         <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2"><Package className="w-5 h-5 text-[var(--color-primario)]" /><h2 className="text-lg font-semibold text-[var(--color-texto)]">Productos más vendidos</h2></div>
-            <Button variant="secundario" tamaño="sm" onClick={() => handleExportar('productos')}><Download className="w-3.5 h-3.5" /> CSV</Button>
+             <Button variant="secundario" tamaño="sm" onClick={() => handleExportar('productos')}><Download className="w-3.5 h-3.5" /> Excel</Button>
           </div>
           <div className="space-y-3 max-h-[350px] overflow-y-auto">
             {productosTop.map((p, i) => (
@@ -98,7 +98,7 @@ export default function ReportesPage() {
         <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2"><PieChartIcon className="w-5 h-5 text-[var(--color-primario)]" /><h2 className="text-lg font-semibold text-[var(--color-texto)]">Ingresos por categoría</h2></div>
-            <Button variant="secundario" tamaño="sm" onClick={() => handleExportar('categorias')}><Download className="w-3.5 h-3.5" /> CSV</Button>
+             <Button variant="secundario" tamaño="sm" onClick={() => handleExportar('categorias')}><Download className="w-3.5 h-3.5" /> Excel</Button>
           </div>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
