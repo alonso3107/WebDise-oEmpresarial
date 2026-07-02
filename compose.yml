@@ -26,10 +26,9 @@ services:
     volumes:
       # Montar código fuente para hot-reload
       - ./Backend:/app
-      # Volumen nombrado para la base de datos SQLite (persiste entre reinicios)
-      - botica-db:/app/db
     environment:
-      - DATABASE_URL=sqlite:////app/db/BoticaVR.db
+      # Guardar la base de datos directamente en el host (Backend/) para sincronización con lazysql
+      - DATABASE_URL=sqlite:////app/BoticaVR.db
       - CARGAR_DATOS_INICIALES=true
       # CORS origins (desde el navegador del host)
       - CORS_ORIGINS=["http://localhost:5173","http://127.0.0.1:5173"]
@@ -66,6 +65,6 @@ services:
     command: pnpm run dev --host 0.0.0.0
     restart: unless-stopped
 
-volumes:
-  botica-db:
-    name: botica-vr-db
+# volumes:
+#   botica-db:
+#     name: botica-vr-db
