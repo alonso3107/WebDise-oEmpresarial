@@ -8,6 +8,7 @@ import { Search, ShoppingCart, Plus, Minus, Trash2, CreditCard, Banknote, Receip
 import { useVentas } from '../hooks/useVentas';
 import Button from '../../../components/ui/Button';
 import Badge from '../../../components/ui/Badge';
+import { DatePicker } from '../../../components/ui/date-picker';
 
 export default function VentasPage() {
   const {
@@ -144,9 +145,8 @@ export default function VentasPage() {
         <div className="space-y-4">
           <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] p-4">
             <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-              <Calendar className="w-5 h-5 text-[var(--color-texto-sec)] hidden sm:block" />
-              <div className="flex items-center gap-2"><label className="text-sm text-[var(--color-texto-sec)]">Desde:</label><input type="date" value={filtroDesde} onChange={(e) => setFiltroDesde(e.target.value)} className="px-3 py-2 rounded-xl border border-[var(--color-borde)] bg-[var(--color-fondo)] text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)] transition-shadow duration-300" /></div>
-              <div className="flex items-center gap-2"><label className="text-sm text-[var(--color-texto-sec)]">Hasta:</label><input type="date" value={filtroHasta} onChange={(e) => setFiltroHasta(e.target.value)} className="px-3 py-2 rounded-xl border border-[var(--color-borde)] bg-[var(--color-fondo)] text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)] transition-shadow duration-300" /></div>
+              <div className="flex items-center gap-2"><label className="text-sm text-[var(--color-texto-sec)]">Desde:</label><DatePicker value={filtroDesde} onChange={setFiltroDesde} placeholder="Seleccionar fecha" className="h-9 text-xs py-1" /></div>
+              <div className="flex items-center gap-2"><label className="text-sm text-[var(--color-texto-sec)]">Hasta:</label><DatePicker value={filtroHasta} onChange={setFiltroHasta} placeholder="Seleccionar fecha" className="h-9 text-xs py-1" /></div>
               {(filtroDesde || filtroHasta) && <button onClick={() => { setFiltroDesde(''); setFiltroHasta(''); }} className="flex items-center gap-1 text-sm text-[var(--color-alerta)] hover:underline font-medium"><X className="w-4 h-4" /> Limpiar</button>}
               <span className="text-sm text-[var(--color-texto-sec)] font-light italic ml-auto">{historial.length} venta{historial.length !== 1 ? 's' : ''}</span>
             </div>

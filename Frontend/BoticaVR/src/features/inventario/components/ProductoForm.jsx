@@ -8,6 +8,7 @@ import { Save } from 'lucide-react';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Modal from '../../../components/ui/Modal';
+import { DatePicker } from '../../../components/ui/date-picker';
 
 export default function ProductoForm({ producto, onGuardar, onCancelar, isSaving }) {
   const esEdicion = !!producto;
@@ -60,6 +61,35 @@ export default function ProductoForm({ producto, onGuardar, onCancelar, isSaving
             <Input label="Nombre *" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Ej: Paracetamol 500mg" disabled={isSaving} autoFocus />
           </div>
 
+      fecha_vencimiento: fechaVencimiento || null,
+    });
+  };
+
+  return (
+    <Modal
+      isOpen={true}
+      onClose={onCancelar}
+      title={esEdicion ? 'Editar producto' : 'Nuevo producto'}
+      tamaño="lg"
+      footer={
+        <>
+          <Button variant="secundario" onClick={onCancelar} disabled={isSaving}>Cancelar</Button>
+          <Button onClick={handleSubmit} isLoading={isSaving}>
+            <Save className="w-4 h-4" /> {esEdicion ? 'Actualizar' : 'Crear'}
+          </Button>
+        </>
+      }
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {errorLocal && (
+          <p className="text-sm text-[var(--color-alerta)] bg-red-50 border border-red-200 rounded-lg p-3">{errorLocal}</p>
+        )}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="sm:col-span-2">
+            <Input label="Nombre *" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Ej: Paracetamol 500mg" disabled={isSaving} autoFocus />
+          </div>
+
           <Input label="Categoría *" value={categoria} onChange={(e) => setCategoria(e.target.value)} placeholder="Ej: Analgésico" disabled={isSaving} />
 
           <Input label="Stock" type="number" min="0" value={stock} onChange={(e) => setStock(e.target.value)} disabled={isSaving} />
@@ -67,7 +97,8 @@ export default function ProductoForm({ producto, onGuardar, onCancelar, isSaving
           <Input label="Precio venta (S/) *" type="number" step="0.01" min="0" value={precioVenta} onChange={(e) => setPrecioVenta(e.target.value)} placeholder="0.00" disabled={isSaving} />
 
           <div className="sm:col-span-2">
-            <Input label="Fecha de vencimiento" type="date" value={fechaVencimiento} onChange={(e) => setFechaVencimiento(e.target.value)} disabled={isSaving} />
+            <label className="block text-xs font-semibold text-[var(--color-texto-sec)] mb-1.5">Fecha de vencimiento</label>
+            <DatePicker value={fechaVencimiento} onChange={setFechaVencimiento} disabled={isSaving} placeholder="Seleccionar fecha de vencimiento" />
           </div>
         </div>
       </form>

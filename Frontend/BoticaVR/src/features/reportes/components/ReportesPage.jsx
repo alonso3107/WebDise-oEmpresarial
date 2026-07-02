@@ -8,6 +8,7 @@ import { TrendingUp, Download, Package, DollarSign, Star, Calendar, BarChart3, P
 import { useReportes } from '../hooks/useReportes';
 import Button from '../../../components/ui/Button';
 import toast from 'react-hot-toast';
+import { DatePicker } from '../../../components/ui/date-picker';
 
 const COLORES = ['#5C6D7C', '#4A5A68', '#7B8FA1', '#96A8B5', '#B0BEC5', '#C8D4DB', '#DCE4E8'];
 
@@ -42,11 +43,10 @@ export default function ReportesPage() {
           <h1 className="text-2xl font-bold text-[var(--color-texto)]">Reportes</h1>
           <p className="text-sm text-[var(--color-texto-sec)] font-light italic mt-1">Estadísticas y análisis del negocio</p>
         </div>
-        <div className="flex items-center gap-3">
-          <Calendar className="w-5 h-5 text-[var(--color-texto-sec)]" />
-          <input type="date" value={filtroDesde} onChange={(e) => setFiltroDesde(e.target.value)} className="px-3 py-2 rounded-xl border border-[var(--color-borde)] bg-[var(--color-card)] shadow-[var(--shadow-card)] text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)] transition-shadow duration-300" />
-          <span className="text-[var(--color-texto-sec)]">—</span>
-          <input type="date" value={filtroHasta} onChange={(e) => setFiltroHasta(e.target.value)} className="px-3 py-2 rounded-xl border border-[var(--color-borde)] bg-[var(--color-card)] shadow-[var(--shadow-card)] text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)] transition-shadow duration-300" />
+        <div className="flex items-center gap-2 max-w-sm sm:max-w-md">
+          <DatePicker value={filtroDesde} onChange={setFiltroDesde} placeholder="Desde" className="h-9 text-xs" />
+          <span className="text-[var(--color-texto-sec)] text-xs">—</span>
+          <DatePicker value={filtroHasta} onChange={setFiltroHasta} placeholder="Hasta" className="h-9 text-xs" />
         </div>
       </div>
 
