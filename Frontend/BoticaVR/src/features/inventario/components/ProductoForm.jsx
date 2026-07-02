@@ -25,13 +25,18 @@ export default function ProductoForm({ producto, onGuardar, onCancelar, isSaving
     setErrorLocal('');
     if (!nombre.trim()) { setErrorLocal('El nombre es obligatorio'); return; }
     if (!categoria.trim()) { setErrorLocal('La categoría es obligatoria'); return; }
-    if (!precioVenta || parseFloat(precioVenta) <= 0) { setErrorLocal('El precio de venta debe ser mayor a 0'); return; }
+    
+    const stockInt = parseInt(stock);
+    if (isNaN(stockInt) || stockInt < 0) { setErrorLocal('El stock no puede ser negativo'); return; }
+    
+    const precioFloat = parseFloat(precioVenta);
+    if (isNaN(precioFloat) || precioFloat <= 0) { setErrorLocal('El precio de venta debe ser mayor a 0'); return; }
 
     onGuardar({
       nombre: nombre.trim(),
       categoria: categoria.trim(),
-      stock: parseInt(stock) || 0,
-      precio_venta: parseFloat(precioVenta),
+      stock: stockInt,
+      precio_venta: precioFloat,
       fecha_vencimiento: fechaVencimiento || null,
     });
   };

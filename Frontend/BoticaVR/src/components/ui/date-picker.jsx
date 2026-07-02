@@ -37,7 +37,7 @@ export function DatePicker({ value, onChange, placeholder = "Seleccionar fecha",
           variant="outline"
           disabled={disabled}
           className={cn(
-            "w-full justify-start text-left font-normal bg-[var(--color-card)] border-[var(--color-borde)] text-[var(--color-texto)] hover:bg-[var(--color-fondo)] rounded-xl h-10 px-3",
+            "w-full sm:w-[180px] justify-start text-left font-normal bg-[var(--color-card)] border-[var(--color-borde)] text-[var(--color-texto)] hover:bg-[var(--color-fondo)] rounded-xl h-10 px-3",
             !value && "text-[var(--color-texto-sec)]",
             className
           )}
@@ -58,6 +58,9 @@ export function DatePicker({ value, onChange, placeholder = "Seleccionar fecha",
           disabled={disabled}
           locale={es}
           initialFocus
+          captionLayout="dropdown"
+          startMonth={new Date(2020, 0)}
+          endMonth={new Date(2035, 11)}
         />
       </PopoverContent>
     </Popover>
