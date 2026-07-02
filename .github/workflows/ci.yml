@@ -1,0 +1,75 @@
+name: Integración Continua (CI)
+
+on:
+  push:
+    branches: [ "v3", "main" ]
+  pull_request:
+    branches: [ "v3", "main" ]
+
+jobs:
+  # ────────────────────────────────────────────────────────
+  # Validación del Backend (FastAPI + Unittest)
+  # ────────────────────────────────────────────────────────
+  backend-validation:
+    name: Validar Backend (FastAPI)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Backend
+
+    steps:
+      - name: Descargar código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar entorno de Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Instalar dependencias del backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Ejecutar pruebas (unittest)
+        run: |
+          python -m unittest discover -s tests
+
+  # ────────────────────────────────────────────────────────
+  # Validación del Frontend (Vite + React)
+  # ────────────────────────────────────────────────────────
+  frontend-validation:
+    name: Validar Frontend (React + Vite)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Frontend/BoticaVR
+
+    steps:
+      - name: Descargar código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar entorno de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Instalar PNPM (v11)
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Obtener caché de PNPM
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Instalar dependencias del frontend
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Compilar aplicación (pnpm build)
+        run: pnpm build
