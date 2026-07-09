@@ -31,6 +31,14 @@ export function useVentas() {
   const [historial, setHistorial] = useState([]);
   const [filtroDesde, setFiltroDesde] = useState('');
   const [filtroHasta, setFiltroHasta] = useState('');
+  const [fechaHoy] = useState(() => {
+    const fecha = new Date();
+    return [
+      fecha.getFullYear(),
+      String(fecha.getMonth() + 1).padStart(2, '0'),
+      String(fecha.getDate()).padStart(2, '0'),
+    ].join('-');
+  });
 
   /** Carga productos del backend */
   const cargarProductos = useCallback(async () => {
@@ -108,6 +116,19 @@ export function useVentas() {
   /** Totales del carrito */
   const totales = useMemo(() => ventasService.calcularTotales(carrito), [carrito]);
 
+  const resumenVentas = useMemo(() => {
+    const ventasHoy = historial.filter((venta) => venta.fecha?.slice(0, 10) === fechaHoy);
+    const ingresosHoy = ventasHoy.reduce((total, venta) => total + Number(venta.total || 0), 0);
+    const productosEnCarrito = carrito.reduce((total, item) => total + Number(item.cantidad || 0), 0);
+
+    return {
+      ventasHoy: ventasHoy.length,
+      ingresosHoy,
+      productosEnCarrito,
+      productosDisponibles: productos.filter((producto) => Number(producto.stock || 0) > 0).length,
+    };
+  }, [carrito, fechaHoy, historial, productos]);
+
   /** Registra la venta */
   const registrarVenta = async () => {
     if (carrito.length === 0) {
@@ -153,6 +174,7 @@ export function useVentas() {
     cambiarCantidad,
     quitarDelCarrito,
     totales,
+    resumenVentas,
     // Checkout
     metodoPago, setMetodoPago,
     cliente, setCliente,
