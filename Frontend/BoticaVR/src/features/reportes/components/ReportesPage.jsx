@@ -4,7 +4,7 @@
 // ============================================================
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import { TrendingUp, Download, Package, DollarSign, Star, Calendar, BarChart3, PieChart as PieChartIcon } from 'lucide-react';
+import { TrendingUp, Download, Package, DollarSign, Star, BarChart3, PieChart as PieChartIcon } from 'lucide-react';
 import { useReportes } from '../hooks/useReportes';
 import Button from '../../../components/ui/Button';
 import toast from 'react-hot-toast';

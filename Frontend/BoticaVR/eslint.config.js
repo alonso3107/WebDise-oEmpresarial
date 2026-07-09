@@ -24,4 +24,10 @@ export default defineConfig([
       'react-hooks/preserve-manual-memoization': 'off',
     },
   },
+  {
+    files: ['vite.config.js'],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
 ])

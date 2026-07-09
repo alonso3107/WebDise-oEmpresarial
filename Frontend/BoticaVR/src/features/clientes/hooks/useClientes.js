@@ -11,6 +11,7 @@ export function useClientes() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [busqueda, setBusqueda] = useState('');
+  const [fechaReferencia] = useState(() => Date.now());
 
   // Modal
   const [modalAbierto, setModalAbierto] = useState(false);
@@ -47,6 +48,17 @@ export function useClientes() {
         c.telefono?.includes(q)
     );
   }, [clientes, busqueda]);
+
+  const resumenClientes = useMemo(() => {
+    const conTelefono = clientes.filter((cliente) => Boolean(cliente.telefono)).length;
+    const nuevos = clientes.filter((cliente) => {
+      const registro = new Date(cliente.fecha_registro);
+      const dias = (fechaReferencia - registro.getTime()) / (1000 * 60 * 60 * 24);
+      return dias <= 30;
+    }).length;
+
+    return { conTelefono, sinTelefono: clientes.length - conTelefono, nuevos };
+  }, [clientes, fechaReferencia]);
 
   const abrirCrear = () => { setClienteEdicion(null); setModalAbierto(true); };
   const abrirEditar = (c) => { setClienteEdicion(c); setModalAbierto(true); };
@@ -93,6 +105,7 @@ export function useClientes() {
   return {
     clientes: clientesFiltrados,
     totalClientes: clientes.length,
+    resumenClientes,
     isLoading,
     error,
     busqueda, setBusqueda,
