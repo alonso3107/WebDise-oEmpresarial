@@ -1,19 +1,33 @@
 # React / Node
 **/node_modules/
 **/dist/
+**/.vite/
+**/.turbo/
+**/coverage/
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/pnpm-debug.log*
+**/package-lock.json
 .env
+.env.*
+!.env.example
 
 # Python
 **/__pycache__/
 **/*.pyc
+**/*.pyo
 **/venv/
 **/.venv/
 .pytest_cache/
+**/.ruff_cache/
+**/.mypy_cache/
 
 # Base de datos y editores
 *.db
 *.sqlite3
 .vscode/
+.idea/
 
 # Imágenes empaquetadas de Podman/Docker
 *.tar

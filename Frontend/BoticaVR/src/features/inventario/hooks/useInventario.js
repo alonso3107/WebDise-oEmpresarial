@@ -137,6 +137,18 @@ export function useInventario() {
     return resultado;
   }, [productos, filtroStock, filtroVencimiento, filtroCategoria, busqueda]);
 
+  const resumenInventario = useMemo(() => {
+    const criticos = productos.filter((p) => p.stock <= 2).length;
+    const bajos = productos.filter((p) => p.stock > 2 && p.stock <= 5).length;
+    const porVencer = productos.filter((p) => inventarioService.estaPorVencer(p.fecha_vencimiento)).length;
+    const valorInventario = productos.reduce(
+      (total, p) => total + Number(p.stock || 0) * Number(p.precio_venta || 0),
+      0,
+    );
+
+    return { criticos, bajos, porVencer, valorInventario };
+  }, [productos]);
+
   /** Categorías únicas para el filtro */
   const categorias = useMemo(() => {
     const cats = new Set(productos.map((p) => p.categoria).filter(Boolean));
@@ -147,6 +159,7 @@ export function useInventario() {
     // Datos
     productos: productosFiltrados,
     totalProductos: productos.length,
+    resumenInventario,
     isLoading,
     error,
     // Filtros

@@ -1,93 +1,211 @@
 // ============================================================
-// BoticaVR — InventarioPage
-// Tabla TanStack v8 + CRUD + filtros. Componentes UI reutilizables.
+// BoticaVR - InventarioPage
+// Vista simple por prioridad: stock, vencimientos y acciones claras.
 // ============================================================
 
-import { useMemo } from 'react';
-import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table';
-import { Plus, Search, Download, Package, Pencil, Trash2, AlertTriangle, RefreshCw, X } from 'lucide-react';
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Download,
+  FilterX,
+  Package,
+  Pencil,
+  Plus,
+  RefreshCw,
+  Search,
+  Trash2,
+} from 'lucide-react';
 import { useInventario } from '../hooks/useInventario';
 import inventarioService from '../services/inventarioService';
 import ProductoForm from './ProductoForm';
-import Button from '../../../components/ui/Button';
 import Badge from '../../../components/ui/Badge';
+import Button from '../../../components/ui/Button';
 import { TableSkeleton } from '../../../components/ui/Skeleton';
 
-function EstadoVacio({ hayFiltros, onLimpiar }) {
+const formatoEntero = new Intl.NumberFormat('es-PE');
+const formatoMoneda = new Intl.NumberFormat('es-PE', {
+  style: 'currency',
+  currency: 'PEN',
+  minimumFractionDigits: 2,
+});
+
+const formatearMoneda = (valor = 0) => formatoMoneda.format(Number(valor || 0));
+const formatearEntero = (valor = 0) => formatoEntero.format(Number(valor || 0));
+
+function SummaryCard({ icon: Icon, label, value, helper, tone = 'neutral' }) {
+  const toneClasses = {
+    neutral: 'bg-[var(--color-primario)]/10 text-[var(--color-primario)]',
+    success: 'bg-green-100 text-[var(--color-exito)]',
+    warning: 'bg-amber-100 text-amber-700',
+    danger: 'bg-red-100 text-[var(--color-alerta)]',
+  };
+
   return (
-    <div className="text-center py-16">
-      <Package className="w-16 h-16 text-[var(--color-texto-sec)]/30 mx-auto mb-4" />
-      {hayFiltros ? (
-        <>
-          <p className="text-[var(--color-texto-sec)] font-medium mb-2">Sin resultados con los filtros actuales</p>
-          <button onClick={onLimpiar} className="text-sm text-[var(--color-primario)] hover:underline font-medium">Limpiar filtros</button>
-        </>
-      ) : (
-        <>
-          <p className="text-[var(--color-texto-sec)] font-medium mb-1">El inventario está vacío</p>
-          <p className="text-sm text-[var(--color-texto-sec)] font-light italic">Agrega tu primer producto para empezar</p>
-        </>
-      )}
-    </div>
+    <article className="rounded-lg border border-[var(--color-borde)] bg-[var(--color-card)] p-4 shadow-[var(--shadow-card)]">
+      <div className="flex items-start gap-3">
+        <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${toneClasses[tone]}`}>
+          <Icon className="h-5 w-5" />
+        </div>
+        <div className="min-w-0">
+          <p className="text-sm font-medium text-[var(--color-texto-sec)]">{label}</p>
+          <p className="mt-1 text-2xl font-bold tabular-nums text-[var(--color-texto)]">{value}</p>
+          <p className="mt-1 text-xs leading-5 text-[var(--color-texto-sec)]">{helper}</p>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function StockBadge({ producto }) {
+  const stock = Number(producto.stock || 0);
+  const { label } = inventarioService.estadoStock(stock);
+  const variant = stock <= 2 ? 'alerta' : stock <= 5 ? 'advertencia' : 'exito';
+  return <Badge variant={variant} tamaño="md">{stock} und. - {label}</Badge>;
+}
+
+function ExpiryBadge({ fecha }) {
+  if (!fecha) return <Badge variant="neutro">Sin fecha</Badge>;
+
+  const porVencer = inventarioService.estaPorVencer(fecha);
+  return (
+    <Badge variant={porVencer ? 'advertencia' : 'neutro'}>
+      {porVencer ? 'Vence pronto' : 'Vigente'} - {new Date(fecha).toLocaleDateString('es-PE')}
+    </Badge>
+  );
+}
+
+function EmptyState({ hayFiltros, onLimpiar, onCrear }) {
+  return (
+    <section className="rounded-lg border border-dashed border-[var(--color-borde)] bg-[var(--color-card)] px-6 py-14 text-center">
+      <Package className="mx-auto mb-4 h-14 w-14 text-[var(--color-texto-sec)]/35" />
+      <h2 className="text-lg font-bold text-[var(--color-texto)]">
+        {hayFiltros ? 'No encontramos productos con esos filtros' : 'Todavia no hay productos registrados'}
+      </h2>
+      <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[var(--color-texto-sec)]">
+        {hayFiltros
+          ? 'Prueba limpiando filtros o busca por una palabra mas corta.'
+          : 'Registra el primer producto para empezar a controlar stock, precios y vencimientos.'}
+      </p>
+      <div className="mt-5 flex flex-col items-center justify-center gap-2 sm:flex-row">
+        {hayFiltros ? (
+          <Button className="h-10" variant="secundario" onClick={onLimpiar}>
+            <FilterX className="h-4 w-4" /> Limpiar filtros
+          </Button>
+        ) : (
+          <Button className="h-10" onClick={onCrear}>
+            <Plus className="h-4 w-4" /> Nuevo producto
+          </Button>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function ProductCard({ producto, onEditar, onEliminar }) {
+  const stock = Number(producto.stock || 0);
+  const requiereAtencion = stock <= 5 || inventarioService.estaPorVencer(producto.fecha_vencimiento);
+
+  return (
+    <article className={`rounded-lg border bg-[var(--color-card)] p-4 shadow-[var(--shadow-card)] ${requiereAtencion ? 'border-amber-200' : 'border-[var(--color-borde)]'}`}>
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.2fr)_170px_180px_120px] xl:items-center">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="truncate text-base font-bold text-[var(--color-texto)]">{producto.nombre}</h3>
+            {requiereAtencion && (
+              <Badge variant={stock <= 2 ? 'alerta' : 'advertencia'}>
+                Revisar
+              </Badge>
+            )}
+          </div>
+          <p className="mt-1 text-sm text-[var(--color-texto-sec)]">
+            {producto.categoria || 'Sin categoria'}
+          </p>
+        </div>
+
+        <div>
+          <p className="mb-1 text-xs font-semibold uppercase text-[var(--color-texto-sec)]">Stock</p>
+          <StockBadge producto={producto} />
+        </div>
+
+        <div>
+          <p className="mb-1 text-xs font-semibold uppercase text-[var(--color-texto-sec)]">Vencimiento</p>
+          <ExpiryBadge fecha={producto.fecha_vencimiento} />
+        </div>
+
+        <div className="flex items-center justify-between gap-3 xl:justify-end">
+          <div className="xl:text-right">
+            <p className="text-xs font-semibold uppercase text-[var(--color-texto-sec)]">Precio</p>
+            <p className="text-base font-bold tabular-nums text-[var(--color-exito)]">
+              {formatearMoneda(producto.precio_venta)}
+            </p>
+          </div>
+          <div className="flex shrink-0 items-center gap-1">
+            <button
+              type="button"
+              onClick={() => onEditar(producto)}
+              aria-label={`Editar ${producto.nombre}`}
+              className="flex h-10 w-10 items-center justify-center rounded-lg text-[var(--color-texto-sec)] transition-colors duration-200 hover:bg-[var(--color-fondo)] hover:text-[var(--color-primario)] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[var(--color-primario)]/25"
+            >
+              <Pencil className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => onEliminar(producto)}
+              aria-label={`Eliminar ${producto.nombre}`}
+              className="flex h-10 w-10 items-center justify-center rounded-lg text-[var(--color-texto-sec)] transition-colors duration-200 hover:bg-red-50 hover:text-[var(--color-alerta)] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[var(--color-alerta)]/25"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </article>
   );
 }
 
 export default function InventarioPage() {
   const {
-    productos, totalProductos, isLoading, error,
-    filtroStock, setFiltroStock,
-    filtroVencimiento, setFiltroVencimiento,
-    filtroCategoria, setFiltroCategoria,
-    busqueda, setBusqueda,
+    productos,
+    totalProductos,
+    resumenInventario,
+    isLoading,
+    error,
+    filtroStock,
+    setFiltroStock,
+    filtroVencimiento,
+    setFiltroVencimiento,
+    filtroCategoria,
+    setFiltroCategoria,
+    busqueda,
+    setBusqueda,
     categorias,
-    modalAbierto, abrirCrear, abrirEditar, cerrarModal,
+    modalAbierto,
+    abrirCrear,
+    abrirEditar,
+    cerrarModal,
     productoEdicion,
-    guardar, eliminar, isSaving,
-    recargar, exportarExcel,
+    guardar,
+    eliminar,
+    isSaving,
+    recargar,
+    exportarExcel,
   } = useInventario();
 
-  const columns = useMemo(() => [
-    { accessorKey: 'nombre', header: 'Nombre', cell: ({ getValue }) => <span className="font-medium text-[var(--color-texto)]">{getValue()}</span> },
-    { accessorKey: 'categoria', header: 'Categoría', cell: ({ getValue }) => <span className="text-sm text-[var(--color-texto-sec)]">{getValue() || '—'}</span> },
-    {
-      accessorKey: 'stock', header: 'Stock',
-      cell: ({ row }) => {
-        const stock = row.original.stock;
-        const { label } = inventarioService.estadoStock(stock);
-        const variant = stock <= 2 ? 'alerta' : stock <= 5 ? 'advertencia' : 'exito';
-        return <Badge variant={variant}>{stock} — {label}</Badge>;
-      },
-    },
-    { accessorKey: 'precio_venta', header: 'P. Venta', cell: ({ getValue }) => <span className="text-sm font-medium text-[var(--color-exito)]">S/ {parseFloat(getValue() || 0).toFixed(2)}</span> },
-    {
-      accessorKey: 'fecha_vencimiento', header: 'Vencimiento',
-      cell: ({ row }) => {
-        const fecha = row.original.fecha_vencimiento;
-        if (!fecha) return <span className="text-sm text-[var(--color-texto-sec)] font-light italic">—</span>;
-        const estaProximo = inventarioService.estaPorVencer(fecha);
-        return <span className={`text-sm ${estaProximo ? 'text-[var(--color-alerta)] font-medium' : 'text-[var(--color-texto-sec)]'}`}>{new Date(fecha).toLocaleDateString('es-PE')}{estaProximo && ' ⚠'}</span>;
-      },
-    },
-    {
-      id: 'acciones', header: '',
-      cell: ({ row }) => (
-        <div className="flex items-center gap-1 justify-end">
-          <button onClick={() => abrirEditar(row.original)} className="p-2 rounded-lg text-[var(--color-texto-sec)] hover:bg-[var(--color-fondo)] hover:text-[var(--color-primario)] transition-all duration-300" title="Editar"><Pencil className="w-4 h-4" /></button>
-          <button onClick={() => eliminar(row.original)} className="p-2 rounded-lg text-[var(--color-texto-sec)] hover:bg-red-50 hover:text-[var(--color-alerta)] transition-all duration-300" title="Eliminar"><Trash2 className="w-4 h-4" /></button>
-        </div>
-      ),
-    },
-  ], [abrirEditar, eliminar]);
-
-  const table = useReactTable({ data: productos, columns, getCoreRowModel: getCoreRowModel() });
   const hayFiltros = filtroStock !== 'todos' || filtroVencimiento || filtroCategoria || busqueda.trim();
-  const limpiarFiltros = () => { setFiltroStock('todos'); setFiltroVencimiento(false); setFiltroCategoria(''); setBusqueda(''); };
+  const limpiarFiltros = () => {
+    setFiltroStock('todos');
+    setFiltroVencimiento(false);
+    setFiltroCategoria('');
+    setBusqueda('');
+  };
 
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <div className="h-8 w-40 bg-[var(--color-borde)] rounded animate-pulse" />
-        <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] overflow-hidden"><TableSkeleton columns={5} rows={5} /></div>
+        <div className="h-8 w-40 animate-pulse rounded bg-[var(--color-borde)]" />
+        <div className="rounded-lg bg-[var(--color-card)] shadow-[var(--shadow-card)]">
+          <TableSkeleton columns={5} rows={5} />
+        </div>
       </div>
     );
   }
@@ -96,10 +214,12 @@ export default function InventarioPage() {
     return (
       <div className="space-y-6">
         <h1 className="text-2xl font-bold text-[var(--color-texto)]">Inventario</h1>
-        <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] p-12 text-center">
-          <AlertTriangle className="w-12 h-12 text-[var(--color-alerta)] mx-auto mb-4" />
-          <p className="text-[var(--color-texto)] mb-4">{error}</p>
-          <Button onClick={recargar}><RefreshCw className="w-4 h-4" /> Reintentar</Button>
+        <div className="rounded-lg border border-red-200 bg-[var(--color-card)] p-10 text-center shadow-[var(--shadow-card)]">
+          <AlertTriangle className="mx-auto mb-4 h-12 w-12 text-[var(--color-alerta)]" />
+          <p className="mb-4 text-[var(--color-texto)]">{error}</p>
+          <Button className="h-10" onClick={recargar}>
+            <RefreshCw className="h-4 w-4" /> Reintentar
+          </Button>
         </div>
       </div>
     );
@@ -107,68 +227,127 @@ export default function InventarioPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-[var(--color-texto)]">Inventario</h1>
-          <p className="text-sm text-[var(--color-texto-sec)] font-light italic mt-1">{totalProductos} producto{totalProductos !== 1 ? 's' : ''} en total{productos.length !== totalProductos && ` — ${productos.length} mostrados`}</p>
+          <p className="mt-1 text-sm text-[var(--color-texto-sec)]">
+            Control rapido de productos, stock y vencimientos.
+          </p>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="secundario" tamaño="sm" onClick={exportarExcel} disabled={productos.length === 0}><Download className="w-4 h-4" /> Excel</Button>
-          <Button tamaño="sm" onClick={abrirCrear}><Plus className="w-4 h-4" /> Nuevo producto</Button>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Button className="h-10" variant="secundario" onClick={exportarExcel} disabled={productos.length === 0}>
+            <Download className="h-4 w-4" /> Exportar Excel
+          </Button>
+          <Button className="h-10" onClick={abrirCrear}>
+            <Plus className="h-4 w-4" /> Nuevo producto
+          </Button>
         </div>
       </div>
 
-      <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] p-4">
-        <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center flex-wrap">
-          <div className="relative flex-1 min-w-[200px] max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-texto-sec)]" />
-            <input type="text" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} placeholder="Buscar producto..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[var(--color-borde)] bg-[var(--color-fondo)] text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)] focus:border-transparent transition-shadow duration-300 placeholder:font-light placeholder:italic" />
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <SummaryCard
+          icon={Package}
+          label="Productos"
+          value={formatearEntero(totalProductos)}
+          helper={`${formatearEntero(productos.length)} visibles ahora`}
+        />
+        <SummaryCard
+          icon={AlertTriangle}
+          label="Stock critico"
+          value={formatearEntero(resumenInventario.criticos)}
+          helper="Prioridad de reposicion"
+          tone={resumenInventario.criticos ? 'danger' : 'success'}
+        />
+        <SummaryCard
+          icon={CheckCircle2}
+          label="Stock bajo"
+          value={formatearEntero(resumenInventario.bajos)}
+          helper="Conviene revisar compras"
+          tone={resumenInventario.bajos ? 'warning' : 'success'}
+        />
+        <SummaryCard
+          icon={AlertTriangle}
+          label="Por vencer"
+          value={formatearEntero(resumenInventario.porVencer)}
+          helper={`Valor estimado: ${formatearMoneda(resumenInventario.valorInventario)}`}
+          tone={resumenInventario.porVencer ? 'warning' : 'neutral'}
+        />
+      </section>
+
+      <section className="rounded-lg border border-[var(--color-borde)] bg-[var(--color-card)] p-4 shadow-[var(--shadow-card)]">
+        <div className="grid grid-cols-1 gap-3 xl:grid-cols-[minmax(260px,1fr)_180px_190px_220px_auto] xl:items-center">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-texto-sec)]" />
+            <input
+              type="text"
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+              placeholder="Buscar producto o categoria"
+              className="h-11 w-full rounded-lg border border-[var(--color-borde)] bg-[var(--color-fondo)] pl-10 pr-4 text-sm text-[var(--color-texto)] transition-shadow duration-200 placeholder:text-[var(--color-texto-sec)] focus:border-transparent focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)]"
+            />
           </div>
-          <select value={filtroStock} onChange={(e) => setFiltroStock(e.target.value)} className="px-3 py-2.5 rounded-xl border border-[var(--color-borde)] bg-[var(--color-fondo)] text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)] transition-shadow duration-300">
-            <option value="todos">Todo el stock</option><option value="bajo">Stock bajo (≤5)</option><option value="critico">Crítico (≤2)</option>
+
+          <select
+            value={filtroStock}
+            onChange={(e) => setFiltroStock(e.target.value)}
+            className="h-11 rounded-lg border border-[var(--color-borde)] bg-[var(--color-fondo)] px-3 text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)]"
+          >
+            <option value="todos">Todo el stock</option>
+            <option value="bajo">Stock bajo</option>
+            <option value="critico">Stock critico</option>
           </select>
-          <label className="flex items-center gap-2 px-3 py-2.5 rounded-xl border border-[var(--color-borde)] bg-[var(--color-fondo)] text-sm text-[var(--color-texto)] cursor-pointer hover:bg-[var(--color-fondo)]/80 transition-colors duration-300">
-            <input type="checkbox" checked={filtroVencimiento} onChange={(e) => setFiltroVencimiento(e.target.checked)} className="rounded accent-[var(--color-primario)]" /> Próximos a vencer
-          </label>
+
+          <button
+            type="button"
+            onClick={() => setFiltroVencimiento(!filtroVencimiento)}
+            className={`flex h-11 items-center justify-center gap-2 rounded-lg border px-3 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[var(--color-primario)]/25 ${filtroVencimiento ? 'border-amber-300 bg-amber-100 text-amber-800' : 'border-[var(--color-borde)] bg-[var(--color-fondo)] text-[var(--color-texto)] hover:border-[var(--color-primario)]'}`}
+          >
+            <AlertTriangle className="h-4 w-4" />
+            Vencen pronto
+          </button>
+
           {categorias.length > 0 && (
-            <select value={filtroCategoria} onChange={(e) => setFiltroCategoria(e.target.value)} className="px-3 py-2.5 rounded-xl border border-[var(--color-borde)] bg-[var(--color-fondo)] text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)] transition-shadow duration-300">
-              <option value="">Todas las categorías</option>
+            <select
+              value={filtroCategoria}
+              onChange={(e) => setFiltroCategoria(e.target.value)}
+              className="h-11 rounded-lg border border-[var(--color-borde)] bg-[var(--color-fondo)] px-3 text-sm text-[var(--color-texto)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)]"
+            >
+              <option value="">Todas las categorias</option>
               {categorias.map((cat) => <option key={cat} value={cat}>{cat}</option>)}
             </select>
           )}
+
           {hayFiltros && (
-            <button onClick={limpiarFiltros} className="flex items-center gap-1 px-3 py-2.5 text-sm text-[var(--color-alerta)] hover:underline font-medium"><X className="w-4 h-4" /> Limpiar</button>
+            <Button className="h-11" variant="secundario" onClick={limpiarFiltros}>
+              <FilterX className="h-4 w-4" /> Limpiar
+            </Button>
           )}
         </div>
-      </div>
+      </section>
 
-      <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] overflow-hidden">
-        {productos.length === 0 ? (
-          <EstadoVacio hayFiltros={hayFiltros} onLimpiar={limpiarFiltros} />
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                {table.getHeaderGroups().map((hg) => (
-                  <tr key={hg.id} className="border-b border-[var(--color-borde)]">
-                    {hg.headers.map((h) => <th key={h.id} className="px-6 py-3.5 text-left text-xs font-medium text-[var(--color-texto-sec)] uppercase tracking-wider">{flexRender(h.column.columnDef.header, h.getContext())}</th>)}
-                  </tr>
-                ))}
-              </thead>
-              <tbody>
-                {table.getRowModel().rows.map((row) => (
-                  <tr key={row.id} className="border-b border-[var(--color-borde)] last:border-0 hover:bg-[var(--color-fondo)]/50 transition-colors duration-300">
-                    {row.getVisibleCells().map((cell) => <td key={cell.id} className="px-6 py-3.5 text-sm">{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>)}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      {productos.length === 0 ? (
+        <EmptyState hayFiltros={hayFiltros} onLimpiar={limpiarFiltros} onCrear={abrirCrear} />
+      ) : (
+        <section className="space-y-3">
+          {productos.map((producto) => (
+            <ProductCard
+              key={producto.id}
+              producto={producto}
+              onEditar={abrirEditar}
+              onEliminar={eliminar}
+            />
+          ))}
+        </section>
+      )}
 
-      {modalAbierto && <ProductoForm producto={productoEdicion} onGuardar={guardar} onCancelar={cerrarModal} isSaving={isSaving} />}
+      {modalAbierto && (
+        <ProductoForm
+          producto={productoEdicion}
+          onGuardar={guardar}
+          onCancelar={cerrarModal}
+          isSaving={isSaving}
+        />
+      )}
     </div>
   );
 }
