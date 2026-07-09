@@ -4,7 +4,7 @@
 // ============================================================
 
 import { useState } from 'react';
-import { Search, ShoppingCart, Plus, Minus, Trash2, CreditCard, Banknote, Receipt, History, Calendar, X, Package } from 'lucide-react';
+import { Search, ShoppingCart, Plus, Minus, Trash2, CreditCard, Banknote, Receipt, History, X, Package } from 'lucide-react';
 import { useVentas } from '../hooks/useVentas';
 import Button from '../../../components/ui/Button';
 import Badge from '../../../components/ui/Badge';

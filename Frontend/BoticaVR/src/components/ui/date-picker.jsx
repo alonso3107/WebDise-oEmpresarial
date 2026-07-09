@@ -15,7 +15,7 @@ export function DatePicker({ value, onChange, placeholder = "Seleccionar fecha",
     try {
       // parseISO maneja de forma segura las fechas en formato string YYYY-MM-DD
       return parseISO(value)
-    } catch (e) {
+    } catch {
       return undefined
     }
   }, [value])
