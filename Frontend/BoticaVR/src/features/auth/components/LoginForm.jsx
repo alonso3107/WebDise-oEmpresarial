@@ -1,17 +1,23 @@
 // ============================================================
-// BoticaVR — LoginForm
-// Formulario de inicio de sesión con modo demo controlado por
-// variable de entorno VITE_DEMO_MODE y Avatar interactivo.
+// BoticaVR - LoginForm
+// Entrada tranquila y directa para trabajadores de la botica.
 // ============================================================
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogIn, Pill, AlertCircle, Eye, EyeOff, User } from 'lucide-react';
-import useAuthStore from '../../../context/authStore';
+import {
+  AlertCircle,
+  Eye,
+  EyeOff,
+  LockKeyhole,
+  LogIn,
+  Pill,
+  User,
+} from 'lucide-react';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
+import useAuthStore from '../../../context/authStore';
 
-/** true si el modo demo está activado vía .env */
 const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === 'true';
 
 export default function LoginForm() {
@@ -28,8 +34,14 @@ export default function LoginForm() {
     setErrorLocal('');
     limpiarError();
 
-    if (!username.trim()) { setErrorLocal('Ingresa tu nombre de usuario'); return; }
-    if (!password.trim()) { setErrorLocal('Ingresa tu contraseña'); return; }
+    if (!username.trim()) {
+      setErrorLocal('Escribe el usuario para ingresar.');
+      return;
+    }
+    if (!password.trim()) {
+      setErrorLocal('Escribe la contrasena para ingresar.');
+      return;
+    }
 
     const exito = await login(username.trim(), password);
     if (exito) navigate('/dashboard', { replace: true });
@@ -43,128 +55,106 @@ export default function LoginForm() {
   const mensajeError = errorLocal || error;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--color-fondo)] p-4 antialiased">
-      <div className="w-full max-w-[400px] flex flex-col gap-6">
-        
-        {/* Logo minimalista */}
-        <div className="text-center">
-          <div className="inline-flex items-center gap-2 mb-1">
-            <Pill className="w-6 h-6 text-[var(--color-primario)]" />
-            <h1 className="text-2xl font-bold tracking-tight text-[var(--color-texto)]">BoticaVR</h1>
-          </div>
-          <p className="text-xs text-[var(--color-texto-sec)] font-light italic">
-            Sistema de gestión farmacéutica
-          </p>
-        </div>
-
-        {/* Tarjeta de Formulario con Avatar Interactivo */}
-        <div className="bg-[var(--color-card)] rounded-2xl shadow-[var(--shadow-card)] p-8 border border-[var(--color-borde)] relative">
-          
-          {/* Avatar interactivo con hover */}
-          <div className="flex justify-center mb-6 relative group">
-            <div className="w-14 h-14 rounded-full border border-[var(--color-borde)] bg-[var(--color-card)] flex items-center justify-center cursor-help transition-all duration-300 hover:border-[var(--color-primario)] hover:shadow-sm">
-              <User className="w-6 h-6 text-[var(--color-texto-sec)] group-hover:text-[var(--color-primario)] transition-colors duration-300" />
+    <main className="min-h-dvh bg-[#EEF4EF] px-4 py-8 text-[#1C2B36]">
+      <div className="mx-auto grid min-h-[calc(100dvh-4rem)] w-full max-w-6xl grid-cols-1 items-center gap-8 lg:grid-cols-[minmax(0,1fr)_430px]">
+        <section className="hidden lg:block">
+          <div className="max-w-xl">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-[#DDEAE3] bg-white text-[#5C6D7C] shadow-[0_14px_36px_rgba(28,43,54,0.08)]">
+              <Pill className="h-9 w-9" />
             </div>
-            
-            {/* Panel de Hover (Tooltip) */}
-            <div className="absolute top-16 scale-95 opacity-0 invisible group-hover:scale-100 group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-out z-50 w-60 p-4 rounded-xl border border-[var(--color-borde)] bg-[var(--color-card)]/95 backdrop-blur-sm shadow-lg pointer-events-none text-left">
-              <h4 className="text-[10px] font-semibold text-[var(--color-primario)] uppercase tracking-wider mb-2">Credenciales de Acceso</h4>
-              <div className="space-y-1.5 text-xs text-[var(--color-texto)] font-light">
-                <p className="flex justify-between">
-                  <span className="text-[var(--color-texto-sec)]">Usuario:</span> 
-                  <span className="font-mono bg-[var(--color-fondo)] px-1 rounded tabular-nums">user</span>
-                </p>
-                <p className="flex justify-between">
-                  <span className="text-[var(--color-texto-sec)]">Contraseña:</span> 
-                  <span className="font-mono bg-[var(--color-fondo)] px-1 rounded tabular-nums">admin</span>
-                </p>
-                <p className="flex justify-between">
-                  <span className="text-[var(--color-texto-sec)]">Rol:</span> 
-                  <span className="font-medium">Operador</span>
-                </p>
-                <p className="flex justify-between">
-                  <span className="text-[var(--color-texto-sec)]">Entorno:</span> 
-                  <span className="font-medium text-emerald-600">Desarrollo</span>
-                </p>
+
+            <h1 className="mt-7 text-5xl font-bold leading-tight text-[#1C2B36]">
+              BoticaVR
+            </h1>
+            <p className="mt-4 max-w-sm text-base leading-7 text-[#5C6D7C]">
+              Acceso del personal autorizado.
+            </p>
+          </div>
+        </section>
+
+        <section className="mx-auto w-full max-w-[430px] rounded-xl border border-[#DDEAE3] bg-white p-6 shadow-[0_18px_50px_rgba(28,43,54,0.10)] sm:p-8">
+          <div className="mb-7 text-center">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-[#E7F0EA] text-[#5C6D7C]">
+              <Pill className="h-7 w-7" />
+            </div>
+            <h2 className="mt-4 text-2xl font-bold text-[#1C2B36]">Iniciar sesion</h2>
+            <p className="mt-2 text-sm leading-6 text-[#5C6D7C]">
+              Ingresa tus credenciales.
+            </p>
+          </div>
+
+          <div className="mb-5 rounded-lg border border-[#DDEAE3] bg-[#F7FAF7] p-4">
+            <p className="text-sm font-bold text-[#1C2B36]">Credenciales locales</p>
+            <div className="mt-2 grid grid-cols-2 gap-2 text-xs text-[#5C6D7C]">
+              <div className="rounded-md bg-white px-3 py-2">
+                <span className="block font-semibold text-[#1C2B36]">Usuario</span>
+                <span className="font-mono">user</span>
               </div>
-              <div className="mt-2.5 pt-2 border-t border-[var(--color-borde)] text-[9px] text-[var(--color-texto-sec)] text-center font-light italic">
-                Pasa el cursor para ver credenciales
+              <div className="rounded-md bg-white px-3 py-2">
+                <span className="block font-semibold text-[#1C2B36]">Contrasena</span>
+                <span className="font-mono">admin</span>
               </div>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            <h2 className="text-lg font-semibold text-[var(--color-texto)] text-center">Iniciar Sesión</h2>
-
             {mensajeError && (
-              <div className="flex items-start gap-2 p-3 rounded-lg bg-red-50/50 border border-red-200/60">
-                <AlertCircle className="w-4 h-4 text-[var(--color-alerta)] flex-shrink-0 mt-0.5" />
-                <p className="text-xs text-[var(--color-alerta)]">{mensajeError}</p>
+              <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3">
+                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-alerta)]" />
+                <p className="text-sm font-medium text-[var(--color-alerta)]">{mensajeError}</p>
               </div>
             )}
 
-            <Input 
-              label="Usuario" 
-              placeholder="user" 
+            <Input
+              label="Usuario"
+              icon={User}
+              placeholder="user"
               value={username}
-              onChange={(e) => setUsername(e.target.value)} 
-              autoComplete="username" 
-              autoFocus 
-              disabled={isLoading} 
+              onChange={(e) => setUsername(e.target.value)}
+              autoComplete="username"
+              autoFocus
+              disabled={isLoading}
+              className="bg-white"
             />
 
             <div className="relative">
-              <Input 
-                label="Contraseña" 
+              <Input
+                label="Contrasena"
+                icon={LockKeyhole}
                 type={mostrarPassword ? 'text' : 'password'}
-                placeholder="admin" 
-                value={password} 
+                placeholder="admin"
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                autoComplete="current-password" 
-                disabled={isLoading} 
+                autoComplete="current-password"
+                disabled={isLoading}
+                className="bg-white pr-11"
               />
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={() => setMostrarPassword(!mostrarPassword)}
-                className="absolute right-3 top-[34px] text-[var(--color-texto-sec)] hover:text-[var(--color-texto)] transition-colors duration-300 p-1" 
-                tabIndex={-1}
+                aria-label={mostrarPassword ? 'Ocultar contrasena' : 'Mostrar contrasena'}
+                className="absolute right-3 top-[34px] flex h-9 w-9 items-center justify-center rounded-lg text-[#5C6D7C] transition-colors duration-200 hover:bg-[#E7F0EA] hover:text-[#1C2B36] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[#5C6D7C]/25"
               >
-                {mostrarPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                {mostrarPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
 
-            <Button type="submit" fullWidth isLoading={isLoading}>
-              <LogIn className="w-4 h-4" /> Ingresar
+            <Button type="submit" className="h-12 w-full bg-[#5C6D7C] text-[#F7FAF7] hover:bg-[#4A5A68]" disabled={isLoading}>
+              <LogIn className="h-4 w-4" /> Entrar al sistema
             </Button>
 
-            <p className="text-center text-[10px] text-[var(--color-texto-sec)] font-light italic">
-              Uso exclusivo para trabajadores de BoticaVR
-            </p>
-
-            {/* Modo demo */}
             {DEMO_MODE && (
-              <>
-                <div className="relative my-3">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-[var(--color-borde)]" />
-                  </div>
-                  <div className="relative flex justify-center">
-                    <span className="px-2 bg-[var(--color-card)] text-[10px] text-[var(--color-texto-sec)] font-light italic">o</span>
-                  </div>
-                </div>
-
-                <button 
-                  type="button" 
-                  onClick={demoLogin}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-dashed border-[var(--color-borde)] text-xs text-[var(--color-texto-sec)] font-medium hover:border-[var(--color-primario)] hover:text-[var(--color-primario)] hover:bg-[var(--color-primario)]/5 transition-all duration-300"
-                >
-                  🔧 Entrar sin backend (demo)
-                </button>
-              </>
+              <Button type="button" variant="secundario" className="h-11 w-full" onClick={demoLogin}>
+                Entrar en modo demo
+              </Button>
             )}
           </form>
-        </div>
+
+          <p className="mt-6 text-center text-xs leading-5 text-[#5C6D7C]">
+            Uso interno de BoticaVR.
+          </p>
+        </section>
       </div>
-    </div>
+    </main>
   );
 }
