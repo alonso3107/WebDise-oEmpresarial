@@ -7,14 +7,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   AlertCircle,
-  CheckCircle2,
   Eye,
   EyeOff,
-  Leaf,
   LockKeyhole,
   LogIn,
   Pill,
-  ShieldCheck,
   User,
 } from 'lucide-react';
 import Button from '../../../components/ui/Button';
@@ -22,20 +19,6 @@ import Input from '../../../components/ui/Input';
 import useAuthStore from '../../../context/authStore';
 
 const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === 'true';
-
-function TrustItem({ icon: Icon, title, text }) {
-  return (
-    <div className="flex items-start gap-3 rounded-lg border border-[#DDEAE3] bg-white/75 p-3">
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#E7F0EA] text-[#5C6D7C]">
-        <Icon className="h-4 w-4" />
-      </div>
-      <div>
-        <p className="text-sm font-bold text-[#1C2B36]">{title}</p>
-        <p className="mt-1 text-xs leading-5 text-[#5C6D7C]">{text}</p>
-      </div>
-    </div>
-  );
-}
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -76,35 +59,16 @@ export default function LoginForm() {
       <div className="mx-auto grid min-h-[calc(100dvh-4rem)] w-full max-w-6xl grid-cols-1 items-center gap-8 lg:grid-cols-[minmax(0,1fr)_430px]">
         <section className="hidden lg:block">
           <div className="max-w-xl">
-            <div className="inline-flex items-center gap-3 rounded-full border border-[#DDEAE3] bg-white/70 px-4 py-2 text-sm font-semibold text-[#5C6D7C]">
-              <Leaf className="h-4 w-4" />
-              Gestion calmada para una botica ordenada
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-[#DDEAE3] bg-white text-[#5C6D7C] shadow-[0_14px_36px_rgba(28,43,54,0.08)]">
+              <Pill className="h-9 w-9" />
             </div>
 
-            <h1 className="mt-6 text-5xl font-bold leading-tight text-[#1C2B36]">
+            <h1 className="mt-7 text-5xl font-bold leading-tight text-[#1C2B36]">
               BoticaVR
             </h1>
-            <p className="mt-4 max-w-lg text-base leading-7 text-[#5C6D7C]">
-              Un acceso limpio para vender, revisar inventario y atender clientes sin ruido visual.
+            <p className="mt-4 max-w-sm text-base leading-7 text-[#5C6D7C]">
+              Acceso del personal autorizado.
             </p>
-
-            <div className="mt-8 grid max-w-lg grid-cols-1 gap-3">
-              <TrustItem
-                icon={ShieldCheck}
-                title="Acceso protegido"
-                text="Solo trabajadores autorizados pueden entrar al sistema."
-              />
-              <TrustItem
-                icon={Pill}
-                title="Trabajo diario"
-                text="Pensado para operar ventas, stock y clientes con pocos pasos."
-              />
-              <TrustItem
-                icon={CheckCircle2}
-                title="Interfaz simple"
-                text="Pantallas claras para tomar decisiones sin perderse."
-              />
-            </div>
           </div>
         </section>
 
@@ -115,12 +79,12 @@ export default function LoginForm() {
             </div>
             <h2 className="mt-4 text-2xl font-bold text-[#1C2B36]">Iniciar sesion</h2>
             <p className="mt-2 text-sm leading-6 text-[#5C6D7C]">
-              Ingresa tus datos para continuar.
+              Ingresa tus credenciales.
             </p>
           </div>
 
           <div className="mb-5 rounded-lg border border-[#DDEAE3] bg-[#F7FAF7] p-4">
-            <p className="text-sm font-bold text-[#1C2B36]">Acceso local</p>
+            <p className="text-sm font-bold text-[#1C2B36]">Credenciales locales</p>
             <div className="mt-2 grid grid-cols-2 gap-2 text-xs text-[#5C6D7C]">
               <div className="rounded-md bg-white px-3 py-2">
                 <span className="block font-semibold text-[#1C2B36]">Usuario</span>
